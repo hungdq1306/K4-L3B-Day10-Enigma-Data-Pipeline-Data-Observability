@@ -13,11 +13,16 @@ except Exception:
 
 @lru_cache(maxsize=4)
 def _load_model(model_name: str):
+    import os
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
+    os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
     try:
         from sentence_transformers import SentenceTransformer
-        # Thu load model local neu co
-        return SentenceTransformer(model_name)
-    except Exception as exc:
+        try:
+            return SentenceTransformer(model_name, local_files_only=True)
+        except Exception:
+            return SentenceTransformer(model_name)
+    except Exception:
         return None
 
 

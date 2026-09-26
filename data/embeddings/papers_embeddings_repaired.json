@@ -1,7 +1,7 @@
 {
   "backend": "chroma",
   "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
-  "persist_path": "C:\\Users\\tuann\\MyStorage\\VinUniAI\\K4-L3B-Day10-Enigma-Data-Pipeline-Data-Observability\\data\\chroma",
+  "persist_path": "D:\\University\\AICB\\Phase1\\D10\\K4-L3B-Day10-Enigma-Data-Pipeline-Data-Observability\\data\\chroma",
   "collection_name": "papers-repaired",
   "documents": [
     {
@@ -69,23 +69,7 @@
       }
     },
     {
-      "record_id": "10.1145/3637528.3671802::4",
-      "paper_id": "10.1145/3637528.3671802",
-      "title": "Data Observability and Quality Gates for Production RAG Systems",
-      "content": "Title: Data Observability and Quality Gates for Production RAG Systems\nAuthors: Anh Tran, Quoc Pham\nPublished: 2026-06-12\nCategories: Software Engineering, Data Systems\nSummary: Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving.",
-      "metadata": {
-        "paper_id": "10.1145/3637528.3671802",
-        "title": "Data Observability and Quality Gates for Production RAG Systems",
-        "published": "2026-06-12",
-        "authors_joined": "Anh Tran, Quoc Pham",
-        "categories_joined": "Software Engineering, Data Systems",
-        "summary": "Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving.",
-        "abs_url": "https://doi.org/10.1145/3637528.3671802",
-        "pdf_url": "https://doi.org/10.1145/3637528.3671802"
-      }
-    },
-    {
-      "record_id": "10.1145/3637528.3671824::5",
+      "record_id": "10.1145/3637528.3671824::4",
       "paper_id": "10.1145/3637528.3671824",
       "title": "Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines",
       "content": "Title: Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines\nAuthors: Quang Le, Yen Vu\nPublished: 2026-06-12\nCategories: Evaluation Methodology, Enterprise Systems\nSummary: An extended empirical study on tatic benchmarks fail to capture domain drift in enterprise knowledge bases. We establish a synthetic test generator that auto-creates paired evaluation sets whenever new corpora are ingested Further analysis on scaling parameters.",
@@ -98,6 +82,22 @@
         "summary": "An extended empirical study on tatic benchmarks fail to capture domain drift in enterprise knowledge bases. We establish a synthetic test generator that auto-creates paired evaluation sets whenever new corpora are ingested Further analysis on scaling parameters.",
         "abs_url": "https://doi.org/10.1145/3637528.3671824",
         "pdf_url": "https://doi.org/10.1145/3637528.3671824"
+      }
+    },
+    {
+      "record_id": "10.1145/3637528.3671802::5",
+      "paper_id": "10.1145/3637528.3671802",
+      "title": "Data Observability and Quality Gates for Production RAG Systems",
+      "content": "Title: Data Observability and Quality Gates for Production RAG Systems\nAuthors: Anh Tran, Quoc Pham\nPublished: 2026-06-12\nCategories: Software Engineering, Data Systems\nSummary: Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving.",
+      "metadata": {
+        "paper_id": "10.1145/3637528.3671802",
+        "title": "Data Observability and Quality Gates for Production RAG Systems",
+        "published": "2026-06-12",
+        "authors_joined": "Anh Tran, Quoc Pham",
+        "categories_joined": "Software Engineering, Data Systems",
+        "summary": "Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving.",
+        "abs_url": "https://doi.org/10.1145/3637528.3671802",
+        "pdf_url": "https://doi.org/10.1145/3637528.3671802"
       }
     },
     {
@@ -149,23 +149,7 @@
       }
     },
     {
-      "record_id": "10.1145/3637528.3671810::9",
-      "paper_id": "10.1145/3637528.3671810",
-      "title": "Automated Data Quality Profiling with Great Expectations in CI/CD",
-      "content": "Title: Automated Data Quality Profiling with Great Expectations in CI/CD\nAuthors: Son Nguyen, Thuy Doan\nPublished: 2026-06-08\nCategories: Data Quality, DevOps\nSummary: Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.",
-      "metadata": {
-        "paper_id": "10.1145/3637528.3671810",
-        "title": "Automated Data Quality Profiling with Great Expectations in CI/CD",
-        "published": "2026-06-08",
-        "authors_joined": "Son Nguyen, Thuy Doan",
-        "categories_joined": "Data Quality, DevOps",
-        "summary": "Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.",
-        "abs_url": "https://doi.org/10.1145/3637528.3671810",
-        "pdf_url": "https://doi.org/10.1145/3637528.3671810"
-      }
-    },
-    {
-      "record_id": "10.1145/3637528.3671820::10",
+      "record_id": "10.1145/3637528.3671820::9",
       "paper_id": "10.1145/3637528.3671820",
       "title": "Advanced Perspectives on Multi-Agent Consensus for High-Stakes Fact Verification",
       "content": "Title: Advanced Perspectives on Multi-Agent Consensus for High-Stakes Fact Verification\nAuthors: Phong Vu, Ngan Hoang\nPublished: 2026-06-08\nCategories: Multi-Agent Systems, Artificial Intelligence\nSummary: An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.",
@@ -178,6 +162,22 @@
         "summary": "An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.",
         "abs_url": "https://doi.org/10.1145/3637528.3671820",
         "pdf_url": "https://doi.org/10.1145/3637528.3671820"
+      }
+    },
+    {
+      "record_id": "10.1145/3637528.3671810::10",
+      "paper_id": "10.1145/3637528.3671810",
+      "title": "Automated Data Quality Profiling with Great Expectations in CI/CD",
+      "content": "Title: Automated Data Quality Profiling with Great Expectations in CI/CD\nAuthors: Son Nguyen, Thuy Doan\nPublished: 2026-06-08\nCategories: Data Quality, DevOps\nSummary: Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.",
+      "metadata": {
+        "paper_id": "10.1145/3637528.3671810",
+        "title": "Automated Data Quality Profiling with Great Expectations in CI/CD",
+        "published": "2026-06-08",
+        "authors_joined": "Son Nguyen, Thuy Doan",
+        "categories_joined": "Data Quality, DevOps",
+        "summary": "Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.",
+        "abs_url": "https://doi.org/10.1145/3637528.3671810",
+        "pdf_url": "https://doi.org/10.1145/3637528.3671810"
       }
     },
     {

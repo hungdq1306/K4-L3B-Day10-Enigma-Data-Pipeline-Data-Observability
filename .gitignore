@@ -1,8 +1,19 @@
 solution/
 .env
+.env.*
+!.env.example
 lab.txt
 .venv/
+venv/
 src/*.egg-info/
 lab/
 **/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
 doc_verification_report.md
+
+# Vector DB tam thoi (sinh lai moi lan chay pipeline)
+chroma_db/
+data/chroma/*
+!data/chroma/.gitkeep

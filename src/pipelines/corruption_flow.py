@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
+
 import pandas as pd
 
-from core.config import load_settings
+from core.config import Settings, load_settings
 from core.utils import now_utc, read_json, write_csv, write_json
 from evaluation.metrics import evaluate_pipeline
 from ingestion.cleaning import build_clean_dataframe
@@ -14,106 +16,114 @@ from observability.reporting import generate_corruption_report
 from retrieval.index import LocalEmbeddingIndex
 
 
+def _require(path: Path, hint: str) -> None:
+    if not path.exists():
+        raise FileNotFoundError(f"Missing {path}. {hint}")
+
+
+def _load_baseline(settings: Settings) -> tuple[dict[str, Any], pd.DataFrame]:
+    """Load baseline metrics va clean dataset do phase 1 tao ra."""
+    paths = settings.paths
+    hint = "Run phase 1 first (python script/run_phase1.py)."
+    for path in (paths.baseline_metrics, paths.clean_json, paths.eval_testset, paths.raw_records_json):
+        _require(path, hint)
+    baseline_metrics = read_json(paths.baseline_metrics)
+    clean_df = pd.DataFrame(read_json(paths.clean_json))
+    if clean_df.empty:
+        raise RuntimeError("Baseline clean dataset is empty; re-run phase 1.")
+    return baseline_metrics, clean_df
+
+
+def _save_dataset(df: pd.DataFrame, csv_path: Path, json_path: Path) -> None:
+    write_csv(df, csv_path)
+    write_json(json_path, df.to_dict(orient="records"))
+
+
+def _evaluate(settings: Settings, df: pd.DataFrame, embeddings_path: Path, metrics_path: Path, answers_path: Path, label: str) -> dict[str, Any]:
+    """Rebuild Chroma collection cho dataset va evaluate tren test set co dinh."""
+    index = LocalEmbeddingIndex.build(df, settings, embeddings_output_path=embeddings_path)
+    print(f"[corruption] {label}: indexed {len(index.documents)} documents into '{index.collection_name}'")
+    evaluation = evaluate_pipeline(
+        settings=settings,
+        index=index,
+        test_set_path=settings.paths.eval_testset,
+        metrics_output_path=metrics_path,
+        answers_output_path=answers_path,
+    )
+    metrics = evaluation.summary
+    print(
+        f"[corruption] {label}: hit_rate={metrics['retrieval_hit_rate']:.3f} "
+        f"token_f1={metrics['mean_token_f1']:.3f}"
+    )
+    return metrics
+
+
+def _observe(settings: Settings, df: pd.DataFrame, label: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Chay quality checks + freshness report cho mot dataset."""
+    quality = run_data_quality_checks(df, settings, report_name=label)
+    freshness_path = settings.paths.quality_dir / f"{label}_freshness_report.json"
+    freshness = build_freshness_report(df, settings, freshness_path)
+    print(f"[corruption] {label}: quality success={quality.get('success')} | fresh={freshness.get('is_fresh')}")
+    return quality, freshness
+
+
 def main() -> None:
-    """Xay dung corruption -> evaluate -> repair -> compare flow hoan chinh."""
-    print("=" * 60)
-    print("BAT DAU CHAY CORRUPTION & IDEMPOTENT REPAIR FLOW")
-    print("=" * 60)
-
     settings = load_settings()
+    paths = settings.paths
+    run_date = now_utc()
 
-    # 1. Kiem tra baseline metrics va clean data
-    if not settings.paths.clean_json.exists():
-        raise FileNotFoundError(f"Chua co clean dataset tai {settings.paths.clean_json}. Vui long chay run_phase1.py truoc.")
+    # 1. Load baseline metrics va clean dataset.
+    baseline_metrics, clean_df = _load_baseline(settings)
+    print(f"[corruption] Baseline rows: {len(clean_df)}")
 
-    df_clean = pd.read_json(settings.paths.clean_json)
-    baseline_metrics = read_json(settings.paths.baseline_metrics)
-    print(f"\n[Baseline] Clean records: {len(df_clean)} | Baseline Hit Rate: {baseline_metrics.get('retrieval_hit_rate', 0)*100:.1f}%")
+    # 2. Tao corrupted dataframe.
+    corrupted_df = corrupt_clean_dataframe(clean_df.copy(), paths.corruption_log)
+    print(f"[corruption] Corrupted rows: {len(corrupted_df)} (log -> {paths.corruption_log})")
 
-    # 2. Tien hanh Data Corruption
-    print("\n[Step 1/5] Tien hanh tiêm 6 kich ban du lieu loi (Data Corruption Suite)...")
-    corrupted_df = corrupt_clean_dataframe(df_clean, settings.paths.corruption_log)
-    write_csv(corrupted_df, settings.paths.corrupted_clean_csv)
-    write_json(settings.paths.corrupted_clean_json, corrupted_df.to_dict(orient="records"))
-    print(f" -> Da luu du lieu loi: {settings.paths.corrupted_clean_csv}")
-    print(f" -> Da ghi log chi tiet 6 dang loi: {settings.paths.corruption_log}")
+    # 3. Save corrupted artifacts.
+    _save_dataset(corrupted_df, paths.corrupted_clean_csv, paths.corrupted_clean_json)
 
-    # 3. Kiem tra Observability tren du lieu loi
-    print("\n[Step 2/5] Chay Observability tren du lieu loi...")
-    corrupted_quality = run_data_quality_checks(corrupted_df, settings, "corrupted")
-    corrupted_freshness_path = settings.paths.quality_dir / "corrupted_freshness_report.json"
-    corrupted_freshness = build_freshness_report(corrupted_df, settings, corrupted_freshness_path)
-    print(f" -> Quality Gate Status (Bi loi expected): {corrupted_quality['success']}")
-    print(f" -> Freshness SLA Status: is_fresh = {corrupted_freshness['is_fresh']} (stale: {corrupted_freshness['stale_rows']}/{corrupted_freshness['total_rows']})")
-
-    # 4. Danh gia do suy giam tren tap du lieu loi (Silent Failure)
-    print("\n[Step 3/5] Indexing va do luong suy giam tren ChromaDB (collection: papers-corrupted)...")
-    corrupted_index = LocalEmbeddingIndex.build(corrupted_df, settings, settings.paths.corrupted_embeddings_json)
-    corrupted_bundle = evaluate_pipeline(
-        settings=settings,
-        index=corrupted_index,
-        test_set_path=settings.paths.eval_testset,
-        metrics_output_path=settings.paths.corrupted_metrics,
-        answers_output_path=settings.paths.corrupted_answers,
+    # 4. Rebuild index va evaluate tren corrupted data.
+    corrupted_metrics = _evaluate(
+        settings,
+        corrupted_df,
+        paths.corrupted_embeddings_json,
+        paths.corrupted_metrics,
+        paths.corrupted_answers,
+        label="corrupted",
     )
-    corrupted_metrics = corrupted_bundle.summary
-    print(f" -> Corrupted Retrieval Hit Rate: {corrupted_metrics['retrieval_hit_rate'] * 100:.1f}% (Giam tu {baseline_metrics['retrieval_hit_rate']*100:.1f}%)")
-    print(f" -> Corrupted Mean Token F1: {corrupted_metrics['mean_token_f1']:.4f}")
 
-    # 5. Idempotent Repair tu Raw Snapshot
-    print("\n[Step 4/5] Kich hoat co che Idempotent Self-Repair tu Raw Snapshot ban dau...")
-    raw_records = load_raw_records(settings.paths.raw_records_json)
-    repaired_df = build_clean_dataframe(raw_records, now_utc())
-    write_csv(repaired_df, settings.paths.repaired_clean_csv)
-    write_json(settings.paths.repaired_clean_json, repaired_df.to_dict(orient="records"))
-    print(f" -> Phuc hoi thanh cong {len(repaired_df)} ban ghi sach tu snapshot.")
+    # 5. Run quality checks/freshness tren corrupted data.
+    corrupted_quality, corrupted_freshness = _observe(settings, corrupted_df, "corrupted")
 
-    repaired_quality = run_data_quality_checks(repaired_df, settings, "repaired")
-    repaired_freshness_path = settings.paths.quality_dir / "repaired_freshness_report.json"
-    repaired_freshness = build_freshness_report(repaired_df, settings, repaired_freshness_path)
-    print(f" -> Repaired Quality Gate Status: {repaired_quality['success']}")
-    print(f" -> Repaired Freshness SLA Status: is_fresh = {repaired_freshness['is_fresh']}")
+    # 6. Repair lai tu raw records (chay lai cleaning pipeline tu snapshot raw).
+    records = load_raw_records(paths.raw_records_json)
+    repaired_df = build_clean_dataframe(records, run_date)
+    if repaired_df.empty:
+        raise RuntimeError("Repaired dataframe is empty; check raw source data.")
+    _save_dataset(repaired_df, paths.repaired_clean_csv, paths.repaired_clean_json)
+    print(f"[corruption] Repaired rows: {len(repaired_df)} from {len(records)} raw records")
 
-    repaired_index = LocalEmbeddingIndex.build(repaired_df, settings, settings.paths.repaired_embeddings_json)
-    repaired_bundle = evaluate_pipeline(
-        settings=settings,
-        index=repaired_index,
-        test_set_path=settings.paths.eval_testset,
-        metrics_output_path=settings.paths.repaired_metrics,
-        answers_output_path=settings.paths.repaired_answers,
+    # 7. Evaluate repaired dataset.
+    repaired_metrics = _evaluate(
+        settings,
+        repaired_df,
+        paths.repaired_embeddings_json,
+        paths.repaired_metrics,
+        paths.repaired_answers,
+        label="repaired",
     )
-    repaired_metrics = repaired_bundle.summary
-    print(f" -> Repaired Retrieval Hit Rate: {repaired_metrics['retrieval_hit_rate'] * 100:.1f}%")
-    print(f" -> Repaired Mean Token F1: {repaired_metrics['mean_token_f1']:.4f}")
+    repaired_quality, repaired_freshness = _observe(settings, repaired_df, "repaired")
 
-    # 6. Xuat bao cao so sanh 3 trang thai
-    print("\n[Step 5/5] Sinh bao cao doi chieu 3 trang thai (corruption_report.md)...")
+    # 8. Tao comparison report.
     generate_corruption_report(
-        report_path=settings.paths.comparison_report,
-        baseline_metrics=baseline_metrics,
-        corrupted_metrics=corrupted_metrics,
-        repaired_metrics=repaired_metrics,
-        corrupted_quality=corrupted_quality,
-        repaired_quality=repaired_quality,
-        corrupted_freshness=corrupted_freshness,
-        repaired_freshness=repaired_freshness,
+        paths.comparison_report,
+        baseline_metrics,
+        corrupted_metrics,
+        repaired_metrics,
+        corrupted_quality,
+        repaired_quality,
+        corrupted_freshness,
+        repaired_freshness,
     )
-    print(f" -> Da xuat bao cao: {settings.paths.comparison_report}")
-
-    # 7. In bang tong hop doi chieu ra console
-    print("\n" + "=" * 70)
-    print("BANG DOI CHIEU HIEN TUONG SILENT FAILURE VA PHUC HOI (3 TRANG THAI):")
-    print("=" * 70)
-    print(f"{'Chi so':<25} | {'Baseline':<12} | {'Corrupted':<12} | {'Repaired':<12}")
-    print("-" * 70)
-    print(f"{'Retrieval Hit Rate':<25} | {baseline_metrics['retrieval_hit_rate']*100:<11.1f}% | {corrupted_metrics['retrieval_hit_rate']*100:<11.1f}% | {repaired_metrics['retrieval_hit_rate']*100:<11.1f}%")
-    print(f"{'Mean Token F1':<25} | {baseline_metrics['mean_token_f1']:<12.4f} | {corrupted_metrics['mean_token_f1']:<12.4f} | {repaired_metrics['mean_token_f1']:<12.4f}")
-    print(f"{'Judge Accuracy':<25} | {baseline_metrics['judge_accuracy']*100:<11.1f}% | {corrupted_metrics['judge_accuracy']*100:<11.1f}% | {repaired_metrics['judge_accuracy']*100:<11.1f}%")
-    print(f"{'Quality Gate (GX)':<25} | {'PASSED':<12} | {'FAILED':<12} | {'PASSED':<12}")
-    print(f"{'Freshness SLA':<25} | {'FRESH':<12} | {'STALE':<12} | {'FRESH':<12}")
-    print("=" * 70)
-    print("HOAN THANH CORRUPTION & REPAIR FLOW XUAT SAC!")
-
-
-if __name__ == "__main__":
-    main()
+    print(f"[corruption] Report -> {paths.comparison_report}")

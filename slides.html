@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Enigma - Data Pipeline & Observability for RAG</title>
+
+    <!-- Typography: Archivo (Bold Modern) & Nunito (Bauhaus/Swiss Clean) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           SWISS MODERN THEME VARIABLES
+           Clean, high-contrast, Bauhaus-inspired
+           =========================================== */
+        :root {
+            --stage-bg: #121316;
+            --slide-bg: #fbfbfd;
+            --surface-card: #ffffff;
+            --surface-alt: #f0f2f5;
+            --border-light: #e2e4e9;
+            --border-dark: #121316;
+            
+            --text-primary: #121316;
+            --text-secondary: #555962;
+            --text-muted: #8c909a;
+            
+            --accent-red: #ff3300;
+            --accent-red-soft: #fff0eb;
+            --accent-green: #0ea5e9;
+            --accent-badge: #121316;
+
+            --font-display: 'Archivo', sans-serif;
+            --font-body: 'Nunito', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.5s;
+        }
+
+        /* ===========================================
+           FIXED 16:9 STAGE: MANDATORY BASE STYLES
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+        }
+
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: var(--slide-bg);
+            padding: 72px 88px;
+            box-sizing: border-box;
+        }
+
+        .slide.active,
+        .slide.visible {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        /* ===========================================
+           SWISS MODERN GRAPHIC GRIDS & DECORATIONS
+           =========================================== */
+        .swiss-grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: var(--accent-red);
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 2px solid var(--border-dark);
+            padding-bottom: 20px;
+            margin-bottom: 44px;
+        }
+
+        .slide-meta {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-red);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slide-meta::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-red);
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: 54px;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .slide-subtitle {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .slide-number-mark {
+            font-family: var(--font-display);
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 0.85;
+            color: var(--border-dark);
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.08s; }
+        .reveal:nth-child(2) { transition-delay: 0.16s; }
+        .reveal:nth-child(3) { transition-delay: 0.24s; }
+        .reveal:nth-child(4) { transition-delay: 0.32s; }
+        .reveal:nth-child(5) { transition-delay: 0.40s; }
+
+        /* ===========================================
+           SLIDE 1: HERO TITLE SLIDE
+           =========================================== */
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            height: calc(1080px - 144px);
+            gap: 64px;
+            align-items: stretch;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hero-badge-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .badge-swiss {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 16px;
+            background: var(--border-dark);
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .badge-red {
+            background: var(--accent-red);
+        }
+
+        .hero-main-title {
+            font-family: var(--font-display);
+            font-size: 88px;
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+            margin: 28px 0 24px;
+        }
+
+        .hero-main-title span {
+            color: var(--accent-red);
+        }
+
+        .hero-tagline {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text-secondary);
+            border-left: 5px solid var(--accent-red);
+            padding-left: 24px;
+            max-width: 900px;
+        }
+
+        .hero-right {
+            background: var(--surface-card);
+            border: 3px solid var(--border-dark);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 16px 16px 0px var(--border-dark);
+        }
+
+        .team-box-title {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-light);
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+        }
+
+        .team-member {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed var(--border-light);
+        }
+
+        .team-member:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .team-name {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .team-role {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hero-stats-banner {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            background: var(--surface-alt);
+            padding: 24px;
+            border: 2px solid var(--border-dark);
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-val {
+            font-family: var(--font-display);
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--accent-red);
+            line-height: 1;
+        }
+
+        .stat-lbl {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        /* ===========================================
+           SLIDE 2: THE PROBLEM & PIPELINE ARCHITECTURE
+           =========================================== */
+        .content-grid-2col {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 48px;
+            height: calc(1080px - 260px);
+        }
+
+        .box-swiss {
+            background: var(--surface-card);
+            border: 2px solid var(--border-dark);
+            padding: 36px 40px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 10px 0px rgba(18,19,22,0.06);
+        }
+
+        .box-title {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border-dark);
+            padding-bottom: 12px;
+        }
+
+        .box-title-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-red);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .danger-card {
+            background: var(--accent-red-soft);
+            border: 2px solid var(--accent-red);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .danger-card h4 {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-red);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .danger-card p {
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        .bullet-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .bullet-num {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 800;
+            background: var(--border-dark);
+            color: #fff;
+            padding: 3px 8px;
+            margin-top: 2px;
+        }
+
+        .bullet-text h5 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .bullet-text p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        .pipeline-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .stage-card {
+            border: 2px solid var(--border-dark);
+            background: var(--surface-card);
+            padding: 18px 24px;
+            display: grid;
+            grid-template-columns: 80px 1fr 140px;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .stage-step {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--accent-red);
+        }
+
+        .stage-info h5 {
+            font-family: var(--font-display);
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .stage-info p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        .stage-pill {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 10px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-light);
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        /* ===========================================
+           SLIDE 3: OBSERVABILITY & SYNTHETIC CORRUPTION
+           =========================================== */
+        .grid-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 32px;
+            height: calc(1080px - 260px);
+        }
+
+        .card-full-height {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .code-snippet {
+            background: #18191f;
+            color: #f1f2f6;
+            font-family: var(--font-mono);
+            font-size: 13.5px;
+            line-height: 1.5;
+            padding: 18px;
+            border-left: 4px solid var(--accent-red);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .code-snippet .keyword { color: #ff5e7e; font-weight: 700; }
+        .code-snippet .string { color: #a8ff78; }
+        .code-snippet .comment { color: #70788c; }
+
+        .corruption-list {
+            list-style: none;
+        }
+
+        .corruption-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .corruption-badge {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 4px 8px;
+            background: #ffded4;
+            color: #d92600;
+            border: 1px solid #d92600;
+            font-weight: 800;
+        }
+
+        /* ===========================================
+           SLIDE 4: THE 3-STATE QUANTITATIVE BENCHMARK
+           =========================================== */
+        .table-container {
+            background: var(--surface-card);
+            border: 3px solid var(--border-dark);
+            box-shadow: 12px 12px 0px rgba(18,19,22,0.08);
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .benchmark-table th {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: var(--border-dark);
+            color: #ffffff;
+            padding: 20px 24px;
+            letter-spacing: 1px;
+        }
+
+        .benchmark-table td {
+            padding: 20px 24px;
+            border-bottom: 2px solid var(--border-light);
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .benchmark-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .benchmark-table tr.highlight-bad {
+            background: #fff5f2;
+        }
+
+        .benchmark-table tr.highlight-good {
+            background: #f4faf6;
+        }
+
+        .status-pill {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 800;
+            padding: 6px 14px;
+            display: inline-block;
+            border: 2px solid;
+            text-transform: uppercase;
+        }
+
+        .pill-pass {
+            background: #e6f7ec;
+            color: #0d8a43;
+            border-color: #0d8a43;
+        }
+
+        .pill-fail {
+            background: #ffe8e3;
+            color: #d92600;
+            border-color: #d92600;
+        }
+
+        .metric-delta {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 800;
+            color: #d92600;
+            margin-left: 8px;
+        }
+
+        .benchmark-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .summary-card {
+            border: 2px solid var(--border-dark);
+            background: var(--surface-card);
+            padding: 24px;
+        }
+
+        .summary-card h4 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .summary-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        /* ===========================================
+           SLIDE 5: IDEMPOTENT REPAIR & LIVE DEMO
+           =========================================== */
+        .exec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 44px;
+            height: calc(1080px - 260px);
+        }
+
+        .terminal-window {
+            background: #121316;
+            border: 3px solid var(--border-dark);
+            box-shadow: 12px 12px 0px rgba(18,19,22,0.15);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .terminal-header {
+            background: #24262c;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #000;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tdot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .tdot-red { background: #ff5f56; }
+        .tdot-yellow { background: #ffbd2e; }
+        .tdot-green { background: #27c93f; }
+
+        .terminal-title {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: #8c909a;
+            font-weight: 700;
+        }
+
+        .terminal-body {
+            padding: 28px;
+            font-family: var(--font-mono);
+            font-size: 15px;
+            line-height: 1.6;
+            color: #d1d5db;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .terminal-cmd {
+            color: #4ade80;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .terminal-cmd::before {
+            content: "$ ";
+            color: #f87171;
+        }
+
+        .takeaway-banner {
+            background: var(--border-dark);
+            color: #ffffff;
+            padding: 28px 36px;
+            border-left: 8px solid var(--accent-red);
+            margin-top: 24px;
+        }
+
+        .takeaway-banner h4 {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .takeaway-banner p {
+            font-size: 17px;
+            color: #b0b4be;
+            line-height: 1.45;
+        }
+
+        /* ===========================================
+           DECK CONTROLS & BOTTOM BAR
+           =========================================== */
+        .deck-controls {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(18, 19, 22, 0.95);
+            padding: 10px 24px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        .ctrl-btn:hover {
+            background: var(--accent-red);
+            color: #fff;
+        }
+
+        .nav-dots {
+            display: flex;
+            gap: 8px;
+            margin: 0 8px;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+            background: var(--accent-red);
+            transform: scale(1.35);
+        }
+
+        .counter-badge {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: #8c909a;
+            margin-left: 6px;
+        }
+
+        /* Edit mode toggle & hotzone */
+        .edit-hotzone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .edit-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--border-dark);
+            color: #ffffff;
+            border: 2px solid var(--accent-red);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 16px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10001;
+        }
+
+        .edit-toggle.show,
+        .edit-toggle.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        [contenteditable="true"] {
+            outline: 2px dashed var(--accent-red);
+            outline-offset: 4px;
+            background: rgba(255, 51, 0, 0.05);
+        }
+
+        /* Print styles */
+        @media print {
+            html, body {
+                width: 1920px;
+                height: auto;
+                overflow: visible;
+                background: #fff;
+            }
+            .deck-viewport {
+                position: static;
+                overflow: visible;
+            }
+            .deck-stage {
+                position: static;
+                transform: none !important;
+            }
+            .slide {
+                position: relative;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                page-break-after: always;
+                break-after: page;
+            }
+            .deck-controls, .edit-hotzone, .edit-toggle {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Edit Hotzone for in-browser changes -->
+    <div class="edit-hotzone" title="Hover for edit controls"></div>
+    <button class="edit-toggle" id="editToggle" title="Toggle edit mode (Shortcut: E)">EDIT SLIDES (E)</button>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ==========================================
+                 SLIDE 1: HERO & TITLE (SWISS MODERN)
+                 ========================================== -->
+            <section class="slide title-slide active" data-slide="1">
+                <div class="swiss-grid-overlay"></div>
+                <div class="hero-layout">
+                    <div class="hero-left">
+                        <div class="hero-badge-row reveal">
+                            <span class="badge-swiss">AI20K BUILD PHASE</span>
+                            <span class="badge-swiss badge-red">DAY 10 EVALUATION</span>
+                            <span class="badge-swiss">RAG OBSERVABILITY</span>
+                        </div>
+
+                        <div>
+                            <h1 class="hero-main-title reveal">
+                                ENIGMA: <span>DATA PIPELINE</span> &amp; OBSERVABILITY
+                            </h1>
+                            <p class="hero-tagline reveal">
+                                Preventing silent failures in LLM retrieval systems through automated Great Expectations 1.x quality gates, freshness SLAs, and idempotent self-healing.
+                            </p>
+                        </div>
+
+                        <div class="hero-stats-banner reveal">
+                            <div class="stat-item">
+                                <div class="stat-val">100%</div>
+                                <div class="stat-lbl">Baseline Hit Rate</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-val">40% &darr;</div>
+                                <div class="stat-lbl">Silent Corrupt Drop</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-val">100%</div>
+                                <div class="stat-lbl">Healed Recovery</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-right reveal">
+                        <div>
+                            <div class="team-box-title">PROJECT TEAM // ENIGMA (K4-L3-DAY10)</div>
+                            
+                            <div class="team-member">
+                                <div class="team-name">Nguyễn Anh Tuấn</div>
+                                <div class="team-role">
+                                    <span>2A202602700</span>
+                                    <span>Pipeline &amp; Integration</span>
+                                </div>
+                            </div>
+
+                            <div class="team-member">
+                                <div class="team-name">Đặng Quang Hưng</div>
+                                <div class="team-role">
+                                    <span>2A202602719</span>
+                                    <span>Ingestion &amp; Cleaning</span>
+                                </div>
+                            </div>
+
+                            <div class="team-member">
+                                <div class="team-name">Nguyễn Hữu Thành</div>
+                                <div class="team-role">
+                                    <span>2A202602813</span>
+                                    <span>Vector Store &amp; RAG Index</span>
+                                </div>
+                            </div>
+
+                            <div class="team-member">
+                                <div class="team-name">Hà Thị Mỹ Linh</div>
+                                <div class="team-role">
+                                    <span>2A202602619</span>
+                                    <span>Observability &amp; Corruption</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 16px;">
+                            DATE: SEPTEMBER 2026 // LIVE DEMO READY
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 2: THE PROBLEM & 4-STAGE ARCHITECTURE
+                 ========================================== -->
+            <section class="slide" data-slide="2">
+                <div class="swiss-grid-overlay"></div>
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-meta">ARCHITECTURAL BLUEPRINT</div>
+                        <h2 class="slide-title">THE SILENT FAILURE THREAT</h2>
+                        <div class="slide-subtitle">Why standard Vector DBs fail invisibly and how our 4-stage pipeline halts bad data</div>
+                    </div>
+                    <div class="slide-number-mark">02</div>
+                </div>
+
+                <div class="content-grid-2col">
+                    <div class="box-swiss reveal">
+                        <div class="box-title">
+                            <span class="box-title-icon">!</span>
+                            THE SILENT FAILURE PROBLEM
+                        </div>
+
+                        <div class="danger-card">
+                            <h4>No Exceptions Thrown</h4>
+                            <p>Vector databases index nulls, truncated strings, and XML junk without crashing. Retrieval continues silently with degraded relevance.</p>
+                        </div>
+
+                        <div class="bullet-point">
+                            <div class="bullet-num">A</div>
+                            <div class="bullet-text">
+                                <h5>Hallucination Amplification</h5>
+                                <p>When corrupted or empty vectors are retrieved, LLM generators produce plausible-sounding hallucinations with zero warnings.</p>
+                            </div>
+                        </div>
+
+                        <div class="bullet-point">
+                            <div class="bullet-num">B</div>
+                            <div class="bullet-text">
+                                <h5>Schema Drift &amp; Stale Knowledge</h5>
+                                <p>Unmonitored external APIs change payload structure and feed obsolete papers without triggering traditional HTTP 5xx alerts.</p>
+                            </div>
+                        </div>
+
+                        <div class="bullet-point">
+                            <div class="bullet-num">C</div>
+                            <div class="bullet-text">
+                                <h5>Need for Quality Gatekeeping</h5>
+                                <p>Data validation must run <em>before</em> generating embeddings to prevent vector store contamination.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-flow reveal">
+                        <div class="stage-card">
+                            <div class="stage-step">01</div>
+                            <div class="stage-info">
+                                <h5>Ingestion (Crossref API)</h5>
+                                <p>Live REST extraction + offline raw JSON snapshot caching (20 research papers)</p>
+                            </div>
+                            <div class="stage-pill">src/ingestion/crossref.py</div>
+                        </div>
+
+                        <div class="stage-card">
+                            <div class="stage-step">02</div>
+                            <div class="stage-info">
+                                <h5>Cleaning &amp; Feature Prep</h5>
+                                <p>Strip JATS XML tags, calculate age_days, construct 5-part text_for_embedding</p>
+                            </div>
+                            <div class="stage-pill">src/ingestion/cleaning.py</div>
+                        </div>
+
+                        <div class="stage-card">
+                            <div class="stage-step">03</div>
+                            <div class="stage-info">
+                                <h5>Quality Gate (GX 1.x)</h5>
+                                <p>Ephemeral in-memory suite (4 expectation rules) + Freshness SLA check (&lt; 180 days)</p>
+                            </div>
+                            <div class="stage-pill">src/observability/quality.py</div>
+                        </div>
+
+                        <div class="stage-card">
+                            <div class="stage-step">04</div>
+                            <div class="stage-info">
+                                <h5>Vector Store &amp; Retrieval</h5>
+                                <p>ChromaDB cosine space, all-MiniLM-L6-v2 (384-d), 10 benchmark test queries</p>
+                            </div>
+                            <div class="stage-pill">src/retrieval/index.py</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 3: OBSERVABILITY & CORRUPTIONS
+                 ========================================== -->
+            <section class="slide" data-slide="3">
+                <div class="swiss-grid-overlay"></div>
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-meta">DEFENSE-IN-DEPTH</div>
+                        <h2 class="slide-title">OBSERVABILITY &amp; CORRUPTION SUITE</h2>
+                        <div class="slide-subtitle">Simulating real-world production data damage and testing automated tripwires</div>
+                    </div>
+                    <div class="slide-number-mark">03</div>
+                </div>
+
+                <div class="grid-3col">
+                    <div class="box-swiss card-full-height reveal">
+                        <div>
+                            <div class="box-title">
+                                <span class="box-title-icon">1</span>
+                                SYNTHETIC ATTACKS
+                            </div>
+                            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 16px;">
+                                Injected 6 distinct data corruption modes into clean papers to measure system resilience:
+                            </p>
+                            <ul class="corruption-list">
+                                <li class="corruption-item">
+                                    <span>Null DOI Records</span>
+                                    <span class="corruption-badge">NULL_VAL</span>
+                                </li>
+                                <li class="corruption-item">
+                                    <span>Empty &amp; Truncated Text</span>
+                                    <span class="corruption-badge">&lt; 20 CHARS</span>
+                                </li>
+                                <li class="corruption-item">
+                                    <span>Malformed JATS XML</span>
+                                    <span class="corruption-badge">RAW_TAGS</span>
+                                </li>
+                                <li class="corruption-item">
+                                    <span>Stale Data (Age &gt; 3650d)</span>
+                                    <span class="corruption-badge">SLA BREACH</span>
+                                </li>
+                                <li class="corruption-item">
+                                    <span>Semantic Poisoning</span>
+                                    <span class="corruption-badge">DISTORTION</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="badge-swiss" style="text-align: center;">TARGET: SILENT DEGRADATION TEST</div>
+                    </div>
+
+                    <div class="box-swiss card-full-height reveal">
+                        <div>
+                            <div class="box-title">
+                                <span class="box-title-icon">2</span>
+                                GREAT EXPECTATIONS 1.X
+                            </div>
+                            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 12px;">
+                                Ephemeral in-memory validator stops corrupt batches before ChromaDB vector embedding:
+                            </p>
+                            <div class="code-snippet">
+<span class="comment"># Ephemeral GX 1.x Expectation Suite</span>
+suite.add_expectation(
+  gxe.<span class="keyword">ExpectColumnValuesToNotBeNull</span>(
+    column=<span class="string">"doi"</span>
+  )
+)
+suite.add_expectation(
+  gxe.<span class="keyword">ExpectColumnValuesToMatchRegex</span>(
+    column=<span class="string">"doi"</span>, regex=<span class="string">r"^10\."</span>
+  )
+)
+suite.add_expectation(
+  gxe.<span class="keyword">ExpectColumnValueLengthsToBeBetween</span>(
+    column=<span class="string">"text_for_embedding"</span>,
+    min_value=<span class="string">20</span>
+  )
+)</div>
+                        </div>
+                        <div class="badge-swiss badge-red" style="text-align: center;">STATUS: HARD QUALITY GATE</div>
+                    </div>
+
+                    <div class="box-swiss card-full-height reveal">
+                        <div>
+                            <div class="box-title">
+                                <span class="box-title-icon">3</span>
+                                FRESHNESS SLA CHECK
+                            </div>
+                            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 16px;">
+                                Dynamic SLA monitors paper obsolescence against live research timelines:
+                            </p>
+
+                            <div style="background: var(--surface-alt); padding: 20px; border: 2px solid var(--border-dark); margin-bottom: 18px;">
+                                <div style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--text-muted);">SLA THRESHOLD</div>
+                                <div style="font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--text-primary); margin: 4px 0;">age_days &le; 180</div>
+                                <div style="font-size: 14px; color: var(--text-secondary);">Papers older than 180 days are flagged as STALE.</div>
+                            </div>
+
+                            <div class="danger-card" style="margin-bottom: 0;">
+                                <h4>Alerting Action</h4>
+                                <p style="font-size: 15px;">Corrupted dataset triggered <strong>38.1% stale records</strong>, immediately firing automated pipeline alerts.</p>
+                            </div>
+                        </div>
+                        <div class="badge-swiss" style="text-align: center;">ZERO HUMAN LATENCY</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 4: THE 3-STATE BENCHMARK
+                 ========================================== -->
+            <section class="slide" data-slide="4">
+                <div class="swiss-grid-overlay"></div>
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-meta">EXPERIMENTAL VALIDATION</div>
+                        <h2 class="slide-title">THE 3-STATE BENCHMARK RESULTS</h2>
+                        <div class="slide-subtitle">Side-by-side empirical performance of Baseline vs Corrupted vs Repaired pipeline</div>
+                    </div>
+                    <div class="slide-number-mark">04</div>
+                </div>
+
+                <div class="table-container reveal">
+                    <table class="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>PIPELINE STATE</th>
+                                <th>HIT RATE (K=3)</th>
+                                <th>MEAN TOKEN F1</th>
+                                <th>JUDGE ACCURACY</th>
+                                <th>GX VALIDATION</th>
+                                <th>FRESHNESS SLA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight-good">
+                                <td><strong>1. Clean Baseline</strong></td>
+                                <td>100.0%</td>
+                                <td>1.0000</td>
+                                <td>100.0%</td>
+                                <td><span class="status-pill pill-pass">PASSED (4/4)</span></td>
+                                <td><span class="status-pill pill-pass">FRESH (0% Stale)</span></td>
+                            </tr>
+                            <tr class="highlight-bad">
+                                <td><strong>2. Corrupted State</strong></td>
+                                <td>40.0% <span class="metric-delta">(&darr; 60%)</span></td>
+                                <td>0.5720 <span class="metric-delta">(&darr; 43%)</span></td>
+                                <td>60.0% <span class="metric-delta">(&darr; 40%)</span></td>
+                                <td><span class="status-pill pill-fail">FAILED (2 Errs)</span></td>
+                                <td><span class="status-pill pill-fail">ALERT (38.1% Stale)</span></td>
+                            </tr>
+                            <tr class="highlight-good">
+                                <td><strong>3. Repaired (Healed)</strong></td>
+                                <td>100.0%</td>
+                                <td>1.0000</td>
+                                <td>100.0%</td>
+                                <td><span class="status-pill pill-pass">PASSED (4/4)</span></td>
+                                <td><span class="status-pill pill-pass">FRESH (0% Stale)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="benchmark-cards reveal">
+                    <div class="summary-card">
+                        <h4>Impact on Retrieval</h4>
+                        <p>Corrupting 6 records caused Hit Rate to plunge by 60%. The vector index silently returned completely irrelevant papers for 6 out of 10 test questions.</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h4>Observability Detection</h4>
+                        <p>Great Expectations immediately caught null DOIs and empty texts. The Freshness SLA caught expired research without requiring manual spot-checks.</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h4>100% Deterministic Recovery</h4>
+                        <p>The repair routine flushed corrupted vector partitions, re-applied idempotent cleaning, and restored all 10 retrieval questions to perfect 1.00 F1 score.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 5: SELF-HEALING & LIVE DEMO
+                 ========================================== -->
+            <section class="slide" data-slide="5">
+                <div class="swiss-grid-overlay"></div>
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-meta">PRODUCTION READINESS</div>
+                        <h2 class="slide-title">SELF-HEALING &amp; LIVE DEMO</h2>
+                        <div class="slide-subtitle">Idempotent recovery design and live reproduction commands for examination</div>
+                    </div>
+                    <div class="slide-number-mark">05</div>
+                </div>
+
+                <div class="exec-grid">
+                    <div class="box-swiss reveal">
+                        <div class="box-title">
+                            <span class="box-title-icon">&check;</span>
+                            IDEMPOTENT REPAIR ARCHITECTURE
+                        </div>
+
+                        <div class="bullet-point">
+                            <div class="bullet-num">01</div>
+                            <div class="bullet-text">
+                                <h5>Deterministic Hashing &amp; Upsert</h5>
+                                <p>Records are keyed by normalized DOI. Re-running the pipeline multiple times never creates duplicate vectors or state explosion in ChromaDB.</p>
+                            </div>
+                        </div>
+
+                        <div class="bullet-point">
+                            <div class="bullet-num">02</div>
+                            <div class="bullet-text">
+                                <h5>Atomic Quarantine Partitioning</h5>
+                                <p>Corrupted records that fail GX checks are isolated into dead-letter storage, protecting downstream vector embedding workloads.</p>
+                            </div>
+                        </div>
+
+                        <div class="bullet-point">
+                            <div class="bullet-num">03</div>
+                            <div class="bullet-text">
+                                <h5>Automated Recovery Workflow</h5>
+                                <p>When corruption is detected, the pipeline automatically fetches verified raw snapshots, sanitizes features, and re-indexes the vector space.</p>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-banner">
+                            <h4>Core Engineering Takeaway</h4>
+                            <p>"Garbage in, hallucination out. Data Observability is not optional — it is the primary safety shield of production RAG."</p>
+                        </div>
+                    </div>
+
+                    <div class="terminal-window reveal">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <div class="tdot tdot-red"></div>
+                                <div class="tdot tdot-yellow"></div>
+                                <div class="tdot tdot-green"></div>
+                            </div>
+                            <div class="terminal-title">powershell -- live demo execution</div>
+                        </div>
+
+                        <div class="terminal-body">
+                            <div>
+                                <div style="color: #9ca3af; margin-bottom: 12px;"># 1. Execute Clean End-to-End Pipeline</div>
+                                <div class="terminal-cmd">python -m src.pipelines.phase1</div>
+                                <div style="color: #6b7280; font-size: 13.5px; margin: 4px 0 16px 18px;">
+                                    &rarr; Ingestion &rarr; Cleaning &rarr; ChromaDB &rarr; GX (4/4 PASS) &rarr; SLA (FRESH)
+                                </div>
+
+                                <div style="color: #9ca3af; margin-bottom: 12px;"># 2. Run 3-State Corruption &amp; Repair Flow</div>
+                                <div class="terminal-cmd">python -m src.pipelines.corruption_flow</div>
+                                <div style="color: #6b7280; font-size: 13.5px; margin: 4px 0 16px 18px;">
+                                    &rarr; Injects 6 corruptions &rarr; Measures Silent Failure (Hit Rate 40%)<br>
+                                    &rarr; Fires GX &amp; SLA Alerts &rarr; Idempotent Self-Healing (100% Recovery)
+                                </div>
+                            </div>
+
+                            <div style="background: #1c1d24; padding: 16px; border: 1px solid #323541;">
+                                <div style="color: #f87171; font-weight: 700; font-size: 13px;">[READY FOR LIVE EVALUATION]</div>
+                                <div style="color: #9ca3af; font-size: 13.5px; margin-top: 4px;">
+                                    All 10 benchmark test questions and automated validations execute in &lt; 8 seconds.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Presentation Chrome: Controls & Counter -->
+    <nav class="deck-controls">
+        <button class="ctrl-btn" id="prevBtn" title="Previous Slide (&larr;)">&larr;</button>
+        <div class="nav-dots" id="navDots">
+            <div class="nav-dot active" data-index="0"></div>
+            <div class="nav-dot" data-index="1"></div>
+            <div class="nav-dot" data-index="2"></div>
+            <div class="nav-dot" data-index="3"></div>
+            <div class="nav-dot" data-index="4"></div>
+        </div>
+        <button class="ctrl-btn" id="nextBtn" title="Next Slide (&rarr;)">&rarr;</button>
+        <span class="counter-badge" id="slideCounter">01 / 05</span>
+        <button class="ctrl-btn" id="fullscreenBtn" title="Fullscreen (F)" style="font-size: 14px; margin-left: 6px;">[F]</button>
+    </nav>
+
+    <!-- ==========================================
+         PRESENTATION CONTROLLER JAVASCRIPT
+         ========================================== -->
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = Array.from(document.querySelectorAll('.slide'));
+                this.dots = Array.from(document.querySelectorAll('.nav-dot'));
+                this.counter = document.getElementById('slideCounter');
+                this.stage = document.getElementById('deckStage');
+                this.currentSlide = 0;
+                this.isEditing = false;
+
+                this.setupStageScale();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupButtons();
+                this.setupInlineEditing();
+                this.showSlide(0);
+            }
+
+            // Fixed 16:9 uniform stage scaling
+            setupStageScale() {
+                const scale = () => {
+                    const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                    const x = (window.innerWidth - 1920 * factor) / 2;
+                    const y = (window.innerHeight - 1080 * factor) / 2;
+                    this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+                };
+                scale();
+                window.addEventListener('resize', scale);
+            }
+
+            showSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                
+                this.slides.forEach((slide, i) => {
+                    const isActive = i === this.currentSlide;
+                    slide.classList.toggle('active', isActive);
+                    slide.classList.toggle('visible', isActive);
+                });
+
+                this.dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+
+                if (this.counter) {
+                    const cur = String(this.currentSlide + 1).padStart(2, '0');
+                    const tot = String(this.slides.length).padStart(2, '0');
+                    this.counter.textContent = `${cur} / ${tot}`;
+                }
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.slides.length - 1) {
+                    this.showSlide(this.currentSlide + 1);
+                }
+            }
+
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.showSlide(this.currentSlide - 1);
+                }
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    // Do not intercept if currently editing content
+                    if (this.isEditing && e.target.getAttribute('contenteditable')) {
+                        return;
+                    }
+
+                    switch(e.key) {
+                        case 'ArrowRight':
+                        case 'ArrowDown':
+                        case 'PageDown':
+                        case ' ':
+                            e.preventDefault();
+                            this.nextSlide();
+                            break;
+                        case 'ArrowLeft':
+                        case 'ArrowUp':
+                        case 'PageUp':
+                            e.preventDefault();
+                            this.prevSlide();
+                            break;
+                        case 'Home':
+                            e.preventDefault();
+                            this.showSlide(0);
+                            break;
+                        case 'End':
+                            e.preventDefault();
+                            this.showSlide(this.slides.length - 1);
+                            break;
+                        case 'f':
+                        case 'F':
+                            this.toggleFullscreen();
+                            break;
+                    }
+                });
+            }
+
+            setupTouchNav() {
+                let startX = 0;
+                let startY = 0;
+
+                window.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }, { passive: true });
+
+                window.addEventListener('touchend', (e) => {
+                    const diffX = e.changedTouches[0].clientX - startX;
+                    const diffY = e.changedTouches[0].clientY - startY;
+
+                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+                        if (diffX < 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                }, { passive: true });
+            }
+
+            setupButtons() {
+                document.getElementById('prevBtn')?.addEventListener('click', () => this.prevSlide());
+                document.getElementById('nextBtn')?.addEventListener('click', () => this.nextSlide());
+                document.getElementById('fullscreenBtn')?.addEventListener('click', () => this.toggleFullscreen());
+
+                this.dots.forEach((dot, idx) => {
+                    dot.addEventListener('click', () => this.showSlide(idx));
+                });
+            }
+
+            toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }
+
+            setupInlineEditing() {
+                const hotzone = document.querySelector('.edit-hotzone');
+                const editToggle = document.getElementById('editToggle');
+                let hideTimeout = null;
+
+                if (!hotzone || !editToggle) return;
+
+                // JS hover with 400ms delay timeout
+                hotzone.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                    editToggle.classList.add('show');
+                });
+                hotzone.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isEditing) editToggle.classList.remove('show');
+                    }, 400);
+                });
+                editToggle.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                });
+                editToggle.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isEditing) editToggle.classList.remove('show');
+                    }, 400);
+                });
+
+                const toggleEdit = () => {
+                    this.isEditing = !this.isEditing;
+                    editToggle.classList.toggle('active', this.isEditing);
+                    editToggle.textContent = this.isEditing ? 'SAVING / EDITING (E)' : 'EDIT SLIDES (E)';
+
+                    const editableTargets = document.querySelectorAll(
+                        '.slide-title, .slide-subtitle, .hero-main-title, .hero-tagline, .stat-val, .stat-lbl, p, h4, h5, td'
+                    );
+
+                    editableTargets.forEach(el => {
+                        el.contentEditable = this.isEditing;
+                    });
+
+                    if (!this.isEditing) {
+                        localStorage.setItem('enigma_slides_draft', this.stage.innerHTML);
+                    }
+                };
+
+                hotzone.addEventListener('click', toggleEdit);
+                editToggle.addEventListener('click', toggleEdit);
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+                        toggleEdit();
+                    }
+                });
+
+                // Load autosaved draft if present
+                const saved = localStorage.getItem('enigma_slides_draft');
+                if (saved) {
+                    // Stage draft saved
+                }
+            }
+        }
+
+        // Initialize controller on load
+        window.addEventListener('DOMContentLoaded', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>

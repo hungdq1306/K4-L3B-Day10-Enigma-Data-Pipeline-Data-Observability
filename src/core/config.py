@@ -32,7 +32,10 @@ class Paths:
     gx_dir: Path
     baseline_quality_report: Path
     corrupted_quality_report: Path
+    repaired_quality_report: Path
     freshness_report: Path
+    corrupted_freshness_report: Path
+    repaired_freshness_report: Path
     baseline_report: Path
     corruption_log: Path
     corrupted_metrics: Path
@@ -69,14 +72,37 @@ class Settings:
     paths: Paths
 
 
+TRUTHY = {"1", "true", "yes"}
+
+
+def env_bool(name: str) -> bool:
+    return os.getenv(name, "").strip().lower() in TRUTHY
+
+
+def env_int(name: str, default: int, minimum: int = 1) -> int:
+    """Doc so nguyen tu env; bao loi ro rang thay vi de pipeline crash o buoc sau."""
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        raise RuntimeError(f"{name} must be an integer, got {raw!r}.") from None
+    if value < minimum:
+        raise RuntimeError(f"{name} must be >= {minimum}, got {value}.")
+    return value
+
+
 def load_settings(project_dir: Path | None = None) -> Settings:
     root = (project_dir or Path(__file__).resolve().parents[2]).resolve()
     workspace = root.parent
-    freshness_threshold_days = 180
-    source_from_date = (datetime.now(UTC).date() - timedelta(days=freshness_threshold_days)).isoformat()
 
+    # Load .env truoc khi doc bat ky bien nao (ke ca FRESHNESS_THRESHOLD_DAYS).
     load_dotenv(workspace / ".env")
     load_dotenv(root / ".env", override=False)
+
+    freshness_threshold_days = env_int("FRESHNESS_THRESHOLD_DAYS", 180)
+    source_from_date = (datetime.now(UTC).date() - timedelta(days=freshness_threshold_days)).isoformat()
 
     data_dir = root / "data"
     paths = Paths(
@@ -102,7 +128,10 @@ def load_settings(project_dir: Path | None = None) -> Settings:
         gx_dir=data_dir / "quality" / "gx",
         baseline_quality_report=data_dir / "quality" / "baseline_quality_report.json",
         corrupted_quality_report=data_dir / "quality" / "corrupted_quality_report.json",
+        repaired_quality_report=data_dir / "quality" / "repaired_quality_report.json",
         freshness_report=data_dir / "quality" / "freshness_report.json",
+        corrupted_freshness_report=data_dir / "quality" / "corrupted_freshness_report.json",
+        repaired_freshness_report=data_dir / "quality" / "repaired_freshness_report.json",
         baseline_report=data_dir / "reports" / "phase1_report.md",
         corruption_log=data_dir / "results" / "corruption_log.json",
         corrupted_metrics=data_dir / "results" / "corrupted_metrics.json",
@@ -130,11 +159,11 @@ def load_settings(project_dir: Path | None = None) -> Settings:
         source_api="Crossref REST API",
         source_query="agentic retrieval augmented generation large language model",
         source_filter=f"from-pub-date:{source_from_date},has-abstract:true",
-        max_results=24,
-        top_k=4,
+        max_results=env_int("MAX_RESULTS", 24),
+        top_k=env_int("TOP_K", 4),
         freshness_threshold_days=freshness_threshold_days,
-        refresh_source=os.getenv("REFRESH_SOURCE", "").lower() in {"1", "true", "yes"},
-        refresh_test_set=os.getenv("REFRESH_TEST_SET", "").lower() in {"1", "true", "yes"},
+        refresh_source=env_bool("REFRESH_SOURCE"),
+        refresh_test_set=env_bool("REFRESH_TEST_SET"),
         paths=paths,
     )
 

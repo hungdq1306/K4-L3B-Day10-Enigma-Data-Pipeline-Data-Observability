@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 import json
+import os
 from pathlib import Path
 import re
+import sys
+import tempfile
 from typing import Any, Iterable
 
 
@@ -26,8 +29,7 @@ def write_csv(df, path: Path) -> None:
 
 
 def write_text(path: Path, text: str) -> None:
-    ensure_parent(path)
-    path.write_text(text, encoding="utf-8")
+    _atomic_write_text(path, text)
 
 
 def now_utc() -> datetime:
@@ -50,3 +52,11 @@ def compact_join(items: Iterable[str], sep: str = ", ") -> str:
 def first_sentence(text: str) -> str:
     chunks = re.split(r"(?<=[.!?])\s+", normalize_whitespace(text))
     return chunks[0] if chunks else normalize_whitespace(text)
+
+
+def configure_utf8_stdio() -> None:
+    """Ep stdout/stderr sang UTF-8 de print tieng Viet khong crash tren Windows (cp1252, output bi redirect)."""
+    for stream in (sys.stdout, sys.stderr):
+        encoding = (getattr(stream, "encoding", None) or "").lower().replace("-", "")
+        if encoding != "utf8" and hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")

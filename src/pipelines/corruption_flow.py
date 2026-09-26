@@ -60,9 +60,12 @@ def _evaluate(settings: Settings, df: pd.DataFrame, embeddings_path: Path, metri
 
 def _observe(settings: Settings, df: pd.DataFrame, label: str) -> tuple[dict[str, Any], dict[str, Any]]:
     """Chay quality checks + freshness report cho mot dataset."""
+    freshness_paths = {
+        "corrupted": settings.paths.corrupted_freshness_report,
+        "repaired": settings.paths.repaired_freshness_report,
+    }
     quality = run_data_quality_checks(df, settings, report_name=label)
-    freshness_path = settings.paths.quality_dir / f"{label}_freshness_report.json"
-    freshness = build_freshness_report(df, settings, freshness_path)
+    freshness = build_freshness_report(df, settings, freshness_paths[label])
     print(f"[corruption] {label}: quality success={quality.get('success')} | fresh={freshness.get('is_fresh')}")
     return quality, freshness
 

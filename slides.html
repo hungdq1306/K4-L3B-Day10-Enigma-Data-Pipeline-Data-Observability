@@ -871,15 +871,15 @@
     </style>
 </head>
 <body>
-    <!-- Edit Hotzone for in-browser changes -->
-    <div class="edit-hotzone" title="Hover for edit controls"></div>
-    <button class="edit-toggle" id="editToggle" title="Toggle edit mode (Shortcut: E)">EDIT SLIDES (E)</button>
+    <!-- Nút điều khiển chỉnh sửa trực tiếp trên trình duyệt -->
+    <div class="edit-hotzone" title="Rê chuột để bật thanh chỉnh sửa"></div>
+    <button class="edit-toggle" id="editToggle" title="Chế độ chỉnh sửa (Phím tắt: E)">CHỈNH SỬA SLIDE (E)</button>
 
     <div class="deck-viewport">
         <main class="deck-stage" id="deckStage">
 
             <!-- ==========================================
-                 SLIDE 1: HERO & TITLE (SWISS MODERN)
+                 SLIDE 1: TRANG TIÊU ĐỀ & ĐỘI NGŨ
                  ========================================== -->
             <section class="slide title-slide active" data-slide="1">
                 <div class="swiss-grid-overlay"></div>
@@ -887,44 +887,44 @@
                     <div class="hero-left">
                         <div class="hero-badge-row reveal">
                             <span class="badge-swiss">AI20K BUILD PHASE</span>
-                            <span class="badge-swiss badge-red">DAY 10 EVALUATION</span>
-                            <span class="badge-swiss">RAG OBSERVABILITY</span>
+                            <span class="badge-swiss badge-red">ĐÁNH GIÁ DAY 10</span>
+                            <span class="badge-swiss">GIÁM SÁT DỮ LIỆU RAG</span>
                         </div>
 
                         <div>
                             <h1 class="hero-main-title reveal">
-                                ENIGMA: <span>DATA PIPELINE</span> &amp; OBSERVABILITY
+                                ENIGMA: <span>PIPELINE DỮ LIỆU</span> &amp; OBSERVABILITY
                             </h1>
                             <p class="hero-tagline reveal">
-                                Preventing silent failures in LLM retrieval systems through automated Great Expectations 1.x quality gates, freshness SLAs, and idempotent self-healing.
+                                Ngăn ngừa lỗi âm thầm (Silent Failures) trong hệ thống truy xuất LLM bằng chốt kiểm định tự động Great Expectations 1.x, SLA độ tươi mới và cơ chế tự phục hồi Idempotent.
                             </p>
                         </div>
 
                         <div class="hero-stats-banner reveal">
                             <div class="stat-item">
                                 <div class="stat-val">100%</div>
-                                <div class="stat-lbl">Baseline Hit Rate</div>
+                                <div class="stat-lbl">Độ chính xác Chuẩn</div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-val">40% &darr;</div>
-                                <div class="stat-lbl">Silent Corrupt Drop</div>
+                                <div class="stat-lbl">Tụt giảm do Lỗi ngầm</div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-val">100%</div>
-                                <div class="stat-lbl">Healed Recovery</div>
+                                <div class="stat-lbl">Khôi phục Toàn vẹn</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="hero-right reveal">
                         <div>
-                            <div class="team-box-title">PROJECT TEAM // ENIGMA (K4-L3-DAY10)</div>
+                            <div class="team-box-title">ĐỘI NGŨ DỰ ÁN // ENIGMA (K4-L3-DAY10)</div>
                             
                             <div class="team-member">
                                 <div class="team-name">Nguyễn Anh Tuấn</div>
                                 <div class="team-role">
                                     <span>2A202602700</span>
-                                    <span>Pipeline &amp; Integration</span>
+                                    <span>Tích hợp Pipeline &amp; Điều phối</span>
                                 </div>
                             </div>
 
@@ -932,7 +932,7 @@
                                 <div class="team-name">Đặng Quang Hưng</div>
                                 <div class="team-role">
                                     <span>2A202602719</span>
-                                    <span>Ingestion &amp; Cleaning</span>
+                                    <span>Thu thập &amp; Làm sạch Dữ liệu</span>
                                 </div>
                             </div>
 
@@ -940,7 +940,7 @@
                                 <div class="team-name">Nguyễn Hữu Thành</div>
                                 <div class="team-role">
                                     <span>2A202602813</span>
-                                    <span>Vector Store &amp; RAG Index</span>
+                                    <span>Vector Store &amp; Lập chỉ mục RAG</span>
                                 </div>
                             </div>
 
@@ -948,28 +948,28 @@
                                 <div class="team-name">Hà Thị Mỹ Linh</div>
                                 <div class="team-role">
                                     <span>2A202602619</span>
-                                    <span>Observability &amp; Corruption</span>
+                                    <span>Observability &amp; Bộ tiêm lỗi</span>
                                 </div>
                             </div>
                         </div>
 
                         <div style="font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 16px;">
-                            DATE: SEPTEMBER 2026 // LIVE DEMO READY
+                            THỜI GIAN: THÁNG 09/2026 // SẴN SÀNG LIVE DEMO
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- ==========================================
-                 SLIDE 2: THE PROBLEM & 4-STAGE ARCHITECTURE
+                 SLIDE 2: VẤN ĐỀ LỖI ÂM THẦM & KIẾN TRÚC 4 TẦNG
                  ========================================== -->
             <section class="slide" data-slide="2">
                 <div class="swiss-grid-overlay"></div>
                 <div class="slide-header">
                     <div>
-                        <div class="slide-meta">ARCHITECTURAL BLUEPRINT</div>
-                        <h2 class="slide-title">THE SILENT FAILURE THREAT</h2>
-                        <div class="slide-subtitle">Why standard Vector DBs fail invisibly and how our 4-stage pipeline halts bad data</div>
+                        <div class="slide-meta">KIẾN TRÚC HỆ THỐNG</div>
+                        <h2 class="slide-title">HIỂM HỌA TỪ LỖI ÂM THẦM (SILENT FAILURES)</h2>
+                        <div class="slide-subtitle">Vì sao cơ sở dữ liệu Vector không cảnh báo khi dữ liệu hỏng và giải pháp kiểm soát 4 tầng</div>
                     </div>
                     <div class="slide-number-mark">02</div>
                 </div>
@@ -978,35 +978,35 @@
                     <div class="box-swiss reveal">
                         <div class="box-title">
                             <span class="box-title-icon">!</span>
-                            THE SILENT FAILURE PROBLEM
+                            BẢN CHẤT CỦA LỖI ÂM THẦM
                         </div>
 
                         <div class="danger-card">
-                            <h4>No Exceptions Thrown</h4>
-                            <p>Vector databases index nulls, truncated strings, and XML junk without crashing. Retrieval continues silently with degraded relevance.</p>
+                            <h4>Không hề phát sinh ngoại lệ (Exception)</h4>
+                            <p>Cơ sở dữ liệu Vector vẫn tiếp nhận các trường null, chuỗi bị cắt cụt và rác XML mà không hề bị dừng hay báo lỗi, khiến chất lượng tìm kiếm rơi tự do.</p>
                         </div>
 
                         <div class="bullet-point">
                             <div class="bullet-num">A</div>
                             <div class="bullet-text">
-                                <h5>Hallucination Amplification</h5>
-                                <p>When corrupted or empty vectors are retrieved, LLM generators produce plausible-sounding hallucinations with zero warnings.</p>
+                                <h5>Khuếch đại hiện tượng ảo giác (Hallucination)</h5>
+                                <p>Khi các vector rỗng hoặc sai lệch được truy xuất, mô hình ngôn ngữ lớn (LLM) sẽ sinh câu trả lời sai lệch nhưng nghe rất thuyết phục.</p>
                             </div>
                         </div>
 
                         <div class="bullet-point">
                             <div class="bullet-num">B</div>
                             <div class="bullet-text">
-                                <h5>Schema Drift &amp; Stale Knowledge</h5>
-                                <p>Unmonitored external APIs change payload structure and feed obsolete papers without triggering traditional HTTP 5xx alerts.</p>
+                                <h5>Biến thiên cấu trúc &amp; Tri thức lỗi thời</h5>
+                                <p>API bên ngoài thay đổi định dạng payload hoặc cung cấp các bài báo đã hết hạn nhiều năm mà không kích hoạt mã lỗi HTTP 5xx.</p>
                             </div>
                         </div>
 
                         <div class="bullet-point">
                             <div class="bullet-num">C</div>
                             <div class="bullet-text">
-                                <h5>Need for Quality Gatekeeping</h5>
-                                <p>Data validation must run <em>before</em> generating embeddings to prevent vector store contamination.</p>
+                                <h5>Chốt kiểm định chất lượng là bắt buộc</h5>
+                                <p>Quy trình kiểm định dữ liệu phải được thực thi nghiêm ngặt <em>trước</em> khi tính toán embedding để ngăn chặn ô nhiễm Vector Store.</p>
                             </div>
                         </div>
                     </div>
@@ -1015,8 +1015,8 @@
                         <div class="stage-card">
                             <div class="stage-step">01</div>
                             <div class="stage-info">
-                                <h5>Ingestion (Crossref API)</h5>
-                                <p>Live REST extraction + offline raw JSON snapshot caching (20 research papers)</p>
+                                <h5>Thu thập (Crossref API)</h5>
+                                <p>Trích xuất REST thời gian thực + Lưu bộ đệm snapshot JSON dự phòng (20 công trình khoa học)</p>
                             </div>
                             <div class="stage-pill">src/ingestion/crossref.py</div>
                         </div>
@@ -1024,8 +1024,8 @@
                         <div class="stage-card">
                             <div class="stage-step">02</div>
                             <div class="stage-info">
-                                <h5>Cleaning &amp; Feature Prep</h5>
-                                <p>Strip JATS XML tags, calculate age_days, construct 5-part text_for_embedding</p>
+                                <h5>Làm sạch &amp; Chuẩn hóa</h5>
+                                <p>Bóc tách thẻ XML JATS, tính tuổi bài báo (age_days), tạo chuỗi chuẩn hóa 5 thành phần text_for_embedding</p>
                             </div>
                             <div class="stage-pill">src/ingestion/cleaning.py</div>
                         </div>
@@ -1033,8 +1033,8 @@
                         <div class="stage-card">
                             <div class="stage-step">03</div>
                             <div class="stage-info">
-                                <h5>Quality Gate (GX 1.x)</h5>
-                                <p>Ephemeral in-memory suite (4 expectation rules) + Freshness SLA check (&lt; 180 days)</p>
+                                <h5>Chốt kiểm định (GX 1.x)</h5>
+                                <p>Bộ quy tắc Great Expectations in-memory (4 kỳ vọng) + Giám sát SLA độ tươi mới (&lt; 180 ngày)</p>
                             </div>
                             <div class="stage-pill">src/observability/quality.py</div>
                         </div>
@@ -1042,8 +1042,8 @@
                         <div class="stage-card">
                             <div class="stage-step">04</div>
                             <div class="stage-info">
-                                <h5>Vector Store &amp; Retrieval</h5>
-                                <p>ChromaDB cosine space, all-MiniLM-L6-v2 (384-d), 10 benchmark test queries</p>
+                                <h5>Lập chỉ mục &amp; Truy xuất</h5>
+                                <p>Không gian Cosine ChromaDB, embedding all-MiniLM-L6-v2 (384 chiều), bộ 10 câu hỏi benchmark chuẩn hóa</p>
                             </div>
                             <div class="stage-pill">src/retrieval/index.py</div>
                         </div>
@@ -1052,15 +1052,15 @@
             </section>
 
             <!-- ==========================================
-                 SLIDE 3: OBSERVABILITY & CORRUPTIONS
+                 SLIDE 3: OBSERVABILITY & BỘ TIÊM LỖI
                  ========================================== -->
             <section class="slide" data-slide="3">
                 <div class="swiss-grid-overlay"></div>
                 <div class="slide-header">
                     <div>
-                        <div class="slide-meta">DEFENSE-IN-DEPTH</div>
-                        <h2 class="slide-title">OBSERVABILITY &amp; CORRUPTION SUITE</h2>
-                        <div class="slide-subtitle">Simulating real-world production data damage and testing automated tripwires</div>
+                        <div class="slide-meta">CHIẾN LƯỢC BẢO VỆ ĐA TẦNG</div>
+                        <h2 class="slide-title">GIÁM SÁT DỮ LIỆU &amp; BỘ TIÊM LỖI THỰC NGHIỆM</h2>
+                        <div class="slide-subtitle">Mô phỏng 6 dạng hư hại dữ liệu thực tế trong môi trường production và kích hoạt cảnh báo tức thì</div>
                     </div>
                     <div class="slide-number-mark">03</div>
                 </div>
@@ -1070,48 +1070,48 @@
                         <div>
                             <div class="box-title">
                                 <span class="box-title-icon">1</span>
-                                SYNTHETIC ATTACKS
+                                CÁC DẠNG TẤN CÔNG THỰC NGHIỆM
                             </div>
                             <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 16px;">
-                                Injected 6 distinct data corruption modes into clean papers to measure system resilience:
+                                Đã tiêm 6 chế độ làm hỏng dữ liệu đặc trưng vào tập bài báo sạch để đo lường khả năng chống chịu:
                             </p>
                             <ul class="corruption-list">
                                 <li class="corruption-item">
-                                    <span>Null DOI Records</span>
+                                    <span>Khuyết thiếu DOI (Null DOI)</span>
                                     <span class="corruption-badge">NULL_VAL</span>
                                 </li>
                                 <li class="corruption-item">
-                                    <span>Empty &amp; Truncated Text</span>
-                                    <span class="corruption-badge">&lt; 20 CHARS</span>
+                                    <span>Văn bản rỗng hoặc quá ngắn</span>
+                                    <span class="corruption-badge">&lt; 20 KÝ TỰ</span>
                                 </li>
                                 <li class="corruption-item">
-                                    <span>Malformed JATS XML</span>
+                                    <span>Tạp chất thẻ XML JATS thô</span>
                                     <span class="corruption-badge">RAW_TAGS</span>
                                 </li>
                                 <li class="corruption-item">
-                                    <span>Stale Data (Age &gt; 3650d)</span>
-                                    <span class="corruption-badge">SLA BREACH</span>
+                                    <span>Dữ liệu quá hạn (Tuổi &gt; 3650 ngày)</span>
+                                    <span class="corruption-badge">VI PHẠM SLA</span>
                                 </li>
                                 <li class="corruption-item">
-                                    <span>Semantic Poisoning</span>
-                                    <span class="corruption-badge">DISTORTION</span>
+                                    <span>Biến dạng ngữ nghĩa (Poisoning)</span>
+                                    <span class="corruption-badge">SAI LỆCH</span>
                                 </li>
                             </ul>
                         </div>
-                        <div class="badge-swiss" style="text-align: center;">TARGET: SILENT DEGRADATION TEST</div>
+                        <div class="badge-swiss" style="text-align: center;">MỤC TIÊU: ĐO LƯỜNG TỤT GIẢM NGẦM</div>
                     </div>
 
                     <div class="box-swiss card-full-height reveal">
                         <div>
                             <div class="box-title">
                                 <span class="box-title-icon">2</span>
-                                GREAT EXPECTATIONS 1.X
+                                CHỐT CHẶN GREAT EXPECTATIONS 1.X
                             </div>
                             <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 12px;">
-                                Ephemeral in-memory validator stops corrupt batches before ChromaDB vector embedding:
+                                Bộ kiểm định in-memory ngăn chặn các lô dữ liệu hỏng trước khi chuyển sang bước vector embedding:
                             </p>
                             <div class="code-snippet">
-<span class="comment"># Ephemeral GX 1.x Expectation Suite</span>
+<span class="comment"># Bộ quy tắc kỳ vọng GX 1.x In-Memory</span>
 suite.add_expectation(
   gxe.<span class="keyword">ExpectColumnValuesToNotBeNull</span>(
     column=<span class="string">"doi"</span>
@@ -1129,45 +1129,45 @@ suite.add_expectation(
   )
 )</div>
                         </div>
-                        <div class="badge-swiss badge-red" style="text-align: center;">STATUS: HARD QUALITY GATE</div>
+                        <div class="badge-swiss badge-red" style="text-align: center;">TRẠNG THÁI: CHỐT CHẶN CỨNG</div>
                     </div>
 
                     <div class="box-swiss card-full-height reveal">
                         <div>
                             <div class="box-title">
                                 <span class="box-title-icon">3</span>
-                                FRESHNESS SLA CHECK
+                                GIÁM SÁT SLA ĐỘ TƯƠI MỚI (FRESHNESS)
                             </div>
                             <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 16px;">
-                                Dynamic SLA monitors paper obsolescence against live research timelines:
+                                Thuật toán SLA động theo dõi độ lỗi thời của nghiên cứu theo thời gian thực:
                             </p>
 
                             <div style="background: var(--surface-alt); padding: 20px; border: 2px solid var(--border-dark); margin-bottom: 18px;">
-                                <div style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--text-muted);">SLA THRESHOLD</div>
-                                <div style="font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--text-primary); margin: 4px 0;">age_days &le; 180</div>
-                                <div style="font-size: 14px; color: var(--text-secondary);">Papers older than 180 days are flagged as STALE.</div>
+                                <div style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--text-muted);">NGƯỠNG SLA ĐỘ TƯƠI MỚI</div>
+                                <div style="font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--text-primary); margin: 4px 0;">age_days &le; 180 ngày</div>
+                                <div style="font-size: 14px; color: var(--text-secondary);">Các công trình quá 180 ngày bị cảnh báo là HẾT HẠN (STALE).</div>
                             </div>
 
                             <div class="danger-card" style="margin-bottom: 0;">
-                                <h4>Alerting Action</h4>
-                                <p style="font-size: 15px;">Corrupted dataset triggered <strong>38.1% stale records</strong>, immediately firing automated pipeline alerts.</p>
+                                <h4>Hành động Cảnh báo</h4>
+                                <p style="font-size: 15px;">Tập dữ liệu bị hỏng kích hoạt <strong>38.1% bản ghi quá hạn</strong>, lập tức phát lệnh cảnh báo đỏ cho toàn hệ thống.</p>
                             </div>
                         </div>
-                        <div class="badge-swiss" style="text-align: center;">ZERO HUMAN LATENCY</div>
+                        <div class="badge-swiss" style="text-align: center;">TỰ ĐỘNG HÓA 100%</div>
                     </div>
                 </div>
             </section>
 
             <!-- ==========================================
-                 SLIDE 4: THE 3-STATE BENCHMARK
+                 SLIDE 4: ĐỐI SÁNH ĐỊNH LƯỢNG 3 TRẠNG THÁI
                  ========================================== -->
             <section class="slide" data-slide="4">
                 <div class="swiss-grid-overlay"></div>
                 <div class="slide-header">
                     <div>
-                        <div class="slide-meta">EXPERIMENTAL VALIDATION</div>
-                        <h2 class="slide-title">THE 3-STATE BENCHMARK RESULTS</h2>
-                        <div class="slide-subtitle">Side-by-side empirical performance of Baseline vs Corrupted vs Repaired pipeline</div>
+                        <div class="slide-meta">ĐO ĐẠC THỰC NGHIỆM</div>
+                        <h2 class="slide-title">KẾT QUẢ ĐỐI SÁNH ĐỊNH LƯỢNG 3 TRẠNG THÁI</h2>
+                        <div class="slide-subtitle">Bảng thực nghiệm đối chiếu chi tiết hiệu năng giữa trạng thái Chuẩn, Bị lỗi và Đã phục hồi</div>
                     </div>
                     <div class="slide-number-mark">04</div>
                 </div>
@@ -1176,38 +1176,38 @@ suite.add_expectation(
                     <table class="benchmark-table">
                         <thead>
                             <tr>
-                                <th>PIPELINE STATE</th>
+                                <th>TRẠNG THÁI PIPELINE</th>
                                 <th>HIT RATE (K=3)</th>
                                 <th>MEAN TOKEN F1</th>
-                                <th>JUDGE ACCURACY</th>
-                                <th>GX VALIDATION</th>
-                                <th>FRESHNESS SLA</th>
+                                <th>ĐỘ CHÍNH XÁC LLM</th>
+                                <th>KIỂM ĐỊNH GX</th>
+                                <th>SLA ĐỘ TƯƠI MỚI</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="highlight-good">
-                                <td><strong>1. Clean Baseline</strong></td>
+                                <td><strong>1. Chuẩn ban đầu (Baseline)</strong></td>
                                 <td>100.0%</td>
                                 <td>1.0000</td>
                                 <td>100.0%</td>
-                                <td><span class="status-pill pill-pass">PASSED (4/4)</span></td>
-                                <td><span class="status-pill pill-pass">FRESH (0% Stale)</span></td>
+                                <td><span class="status-pill pill-pass">ĐẠT (4/4)</span></td>
+                                <td><span class="status-pill pill-pass">TƯƠI MỚI (0% Hết hạn)</span></td>
                             </tr>
                             <tr class="highlight-bad">
-                                <td><strong>2. Corrupted State</strong></td>
+                                <td><strong>2. Bị hỏng (Lỗi âm thầm)</strong></td>
                                 <td>40.0% <span class="metric-delta">(&darr; 60%)</span></td>
                                 <td>0.5720 <span class="metric-delta">(&darr; 43%)</span></td>
                                 <td>60.0% <span class="metric-delta">(&darr; 40%)</span></td>
-                                <td><span class="status-pill pill-fail">FAILED (2 Errs)</span></td>
-                                <td><span class="status-pill pill-fail">ALERT (38.1% Stale)</span></td>
+                                <td><span class="status-pill pill-fail">THẤT BẠI (2 Lỗi)</span></td>
+                                <td><span class="status-pill pill-fail">BÁO ĐỘNG (38.1% Hết hạn)</span></td>
                             </tr>
                             <tr class="highlight-good">
-                                <td><strong>3. Repaired (Healed)</strong></td>
+                                <td><strong>3. Đã tự phục hồi (Repaired)</strong></td>
                                 <td>100.0%</td>
                                 <td>1.0000</td>
                                 <td>100.0%</td>
-                                <td><span class="status-pill pill-pass">PASSED (4/4)</span></td>
-                                <td><span class="status-pill pill-pass">FRESH (0% Stale)</span></td>
+                                <td><span class="status-pill pill-pass">ĐẠT (4/4)</span></td>
+                                <td><span class="status-pill pill-pass">TƯƠI MỚI (0% Hết hạn)</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1215,32 +1215,32 @@ suite.add_expectation(
 
                 <div class="benchmark-cards reveal">
                     <div class="summary-card">
-                        <h4>Impact on Retrieval</h4>
-                        <p>Corrupting 6 records caused Hit Rate to plunge by 60%. The vector index silently returned completely irrelevant papers for 6 out of 10 test questions.</p>
+                        <h4>Ảnh hưởng Truy xuất</h4>
+                        <p>Chỉ hỏng 6 bản ghi khiến Hit Rate sụt giảm nghiêm trọng 60%. Vector index âm thầm trả về kết quả sai cho 6/10 câu hỏi kiểm thử mà không có ngoại lệ nào phát sinh.</p>
                     </div>
 
                     <div class="summary-card">
-                        <h4>Observability Detection</h4>
-                        <p>Great Expectations immediately caught null DOIs and empty texts. The Freshness SLA caught expired research without requiring manual spot-checks.</p>
+                        <h4>Cơ chế Bắt lỗi Tức thì</h4>
+                        <p>Great Expectations lập tức phát hiện các bản ghi thiếu DOI và rỗng nội dung. Bộ giám sát SLA phát hiện nghiên cứu hết hạn tự động mà không cần can thiệp thủ công.</p>
                     </div>
 
                     <div class="summary-card">
-                        <h4>100% Deterministic Recovery</h4>
-                        <p>The repair routine flushed corrupted vector partitions, re-applied idempotent cleaning, and restored all 10 retrieval questions to perfect 1.00 F1 score.</p>
+                        <h4>Phục hồi Xác định 100%</h4>
+                        <p>Quy trình tự phục hồi tự động dọn sạch phân vùng lỗi trong ChromaDB, xử lý lại dữ liệu chuẩn hóa và đưa 10 câu hỏi kiểm thử trở lại điểm số F1 tuyệt đối 1.00.</p>
                     </div>
                 </div>
             </section>
 
             <!-- ==========================================
-                 SLIDE 5: SELF-HEALING & LIVE DEMO
+                 SLIDE 5: TỰ PHỤC HỒI IDEMPOTENT & LIVE DEMO
                  ========================================== -->
             <section class="slide" data-slide="5">
                 <div class="swiss-grid-overlay"></div>
                 <div class="slide-header">
                     <div>
-                        <div class="slide-meta">PRODUCTION READINESS</div>
-                        <h2 class="slide-title">SELF-HEALING &amp; LIVE DEMO</h2>
-                        <div class="slide-subtitle">Idempotent recovery design and live reproduction commands for examination</div>
+                        <div class="slide-meta">SẴN SÀNG TRIỂN KHAI PRODUCTION</div>
+                        <h2 class="slide-title">CƠ CHẾ TỰ PHỤC HỒI &amp; TRÌNH DIỄN TRỰC TIẾP</h2>
+                        <div class="slide-subtitle">Kiến trúc phục hồi Idempotent và các câu lệnh thực thi trực tiếp tại buổi báo cáo</div>
                     </div>
                     <div class="slide-number-mark">05</div>
                 </div>
@@ -1249,36 +1249,36 @@ suite.add_expectation(
                     <div class="box-swiss reveal">
                         <div class="box-title">
                             <span class="box-title-icon">&check;</span>
-                            IDEMPOTENT REPAIR ARCHITECTURE
+                            KIẾN TRÚC PHỤC HỒI IDEMPOTENT
                         </div>
 
                         <div class="bullet-point">
                             <div class="bullet-num">01</div>
                             <div class="bullet-text">
-                                <h5>Deterministic Hashing &amp; Upsert</h5>
-                                <p>Records are keyed by normalized DOI. Re-running the pipeline multiple times never creates duplicate vectors or state explosion in ChromaDB.</p>
+                                <h5>Băm xác định &amp; Ghi đè thông minh (Upsert)</h5>
+                                <p>Các bản ghi được định danh duy nhất theo mã DOI chuẩn hóa. Chạy lại pipeline nhiều lần không sinh vector trùng lặp hay làm phình to ChromaDB.</p>
                             </div>
                         </div>
 
                         <div class="bullet-point">
                             <div class="bullet-num">02</div>
                             <div class="bullet-text">
-                                <h5>Atomic Quarantine Partitioning</h5>
-                                <p>Corrupted records that fail GX checks are isolated into dead-letter storage, protecting downstream vector embedding workloads.</p>
+                                <h5>Phân vùng cách ly tự động (Quarantine)</h5>
+                                <p>Các bản ghi không vượt qua kiểm định GX lập tức bị cách ly vào vùng lưu trữ dead-letter, bảo vệ các tiến trình vector hóa phía sau.</p>
                             </div>
                         </div>
 
                         <div class="bullet-point">
                             <div class="bullet-num">03</div>
                             <div class="bullet-text">
-                                <h5>Automated Recovery Workflow</h5>
-                                <p>When corruption is detected, the pipeline automatically fetches verified raw snapshots, sanitizes features, and re-indexes the vector space.</p>
+                                <h5>Quy trình phục hồi khép kín</h5>
+                                <p>Khi phát hiện sự cố, pipeline tự động trích xuất snapshot sạch đã xác thực, làm sạch lại các đặc trưng và cập nhật chỉ mục tức thời.</p>
                             </div>
                         </div>
 
                         <div class="takeaway-banner">
-                            <h4>Core Engineering Takeaway</h4>
-                            <p>"Garbage in, hallucination out. Data Observability is not optional — it is the primary safety shield of production RAG."</p>
+                            <h4>Bài học Kỹ thuật Cốt lõi</h4>
+                            <p>"Dữ liệu rác thì LLM sinh ảo giác. Data Observability không phải là lựa chọn bổ sung — đó là lá chắn an toàn số 1 của mọi hệ sinh thái RAG."</p>
                         </div>
                     </div>
 
@@ -1289,29 +1289,29 @@ suite.add_expectation(
                                 <div class="tdot tdot-yellow"></div>
                                 <div class="tdot tdot-green"></div>
                             </div>
-                            <div class="terminal-title">powershell -- live demo execution</div>
+                            <div class="terminal-title">powershell -- thực thi live demo trực tiếp</div>
                         </div>
 
                         <div class="terminal-body">
                             <div>
-                                <div style="color: #9ca3af; margin-bottom: 12px;"># 1. Execute Clean End-to-End Pipeline</div>
+                                <div style="color: #9ca3af; margin-bottom: 12px;"># 1. Chạy xác thực Pipeline chuẩn (Baseline Clean Run)</div>
                                 <div class="terminal-cmd">python -m src.pipelines.phase1</div>
                                 <div style="color: #6b7280; font-size: 13.5px; margin: 4px 0 16px 18px;">
-                                    &rarr; Ingestion &rarr; Cleaning &rarr; ChromaDB &rarr; GX (4/4 PASS) &rarr; SLA (FRESH)
+                                    &rarr; Thu thập &rarr; Làm sạch &rarr; ChromaDB &rarr; GX (4/4 ĐẠT) &rarr; SLA (TƯƠI MỚI)
                                 </div>
 
-                                <div style="color: #9ca3af; margin-bottom: 12px;"># 2. Run 3-State Corruption &amp; Repair Flow</div>
+                                <div style="color: #9ca3af; margin-bottom: 12px;"># 2. Chạy luồng kiểm chứng 3 trạng thái &amp; Tự phục hồi</div>
                                 <div class="terminal-cmd">python -m src.pipelines.corruption_flow</div>
                                 <div style="color: #6b7280; font-size: 13.5px; margin: 4px 0 16px 18px;">
-                                    &rarr; Injects 6 corruptions &rarr; Measures Silent Failure (Hit Rate 40%)<br>
-                                    &rarr; Fires GX &amp; SLA Alerts &rarr; Idempotent Self-Healing (100% Recovery)
+                                    &rarr; Tiêm 6 dạng lỗi ngầm &rarr; Đo lường suy giảm (Hit Rate 40%)<br>
+                                    &rarr; Kích hoạt cảnh báo GX &amp; SLA &rarr; Tự phục hồi Idempotent (100% Đạt)
                                 </div>
                             </div>
 
                             <div style="background: #1c1d24; padding: 16px; border: 1px solid #323541;">
-                                <div style="color: #f87171; font-weight: 700; font-size: 13px;">[READY FOR LIVE EVALUATION]</div>
+                                <div style="color: #f87171; font-weight: 700; font-size: 13px;">[SẴN SÀNG ĐÁNH GIÁ TRỰC TIẾP]</div>
                                 <div style="color: #9ca3af; font-size: 13.5px; margin-top: 4px;">
-                                    All 10 benchmark test questions and automated validations execute in &lt; 8 seconds.
+                                    Toàn bộ 10 câu hỏi kiểm thử benchmark và các chốt kiểm định hoàn tất trong chưa đầy 8 giây.
                                 </div>
                             </div>
                         </div>
@@ -1324,7 +1324,7 @@ suite.add_expectation(
 
     <!-- Presentation Chrome: Controls & Counter -->
     <nav class="deck-controls">
-        <button class="ctrl-btn" id="prevBtn" title="Previous Slide (&larr;)">&larr;</button>
+        <button class="ctrl-btn" id="prevBtn" title="Slide trước (&larr;)">&larr;</button>
         <div class="nav-dots" id="navDots">
             <div class="nav-dot active" data-index="0"></div>
             <div class="nav-dot" data-index="1"></div>
@@ -1332,9 +1332,9 @@ suite.add_expectation(
             <div class="nav-dot" data-index="3"></div>
             <div class="nav-dot" data-index="4"></div>
         </div>
-        <button class="ctrl-btn" id="nextBtn" title="Next Slide (&rarr;)">&rarr;</button>
+        <button class="ctrl-btn" id="nextBtn" title="Slide tiếp theo (&rarr;)">&rarr;</button>
         <span class="counter-badge" id="slideCounter">01 / 05</span>
-        <button class="ctrl-btn" id="fullscreenBtn" title="Fullscreen (F)" style="font-size: 14px; margin-left: 6px;">[F]</button>
+        <button class="ctrl-btn" id="fullscreenBtn" title="Toàn màn hình (F)" style="font-size: 14px; margin-left: 6px;">[F]</button>
     </nav>
 
     <!-- ==========================================

@@ -1,27 +1,27 @@
 [
   {
-    "paper_id": "10.1145/3637528.3671802",
-    "title": "Data Observability and Quality Gates for Production RAG Systems",
+    "paper_id": "10.1145/3637528.3671824",
+    "title": "Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines",
     "summary": "",
     "authors": [
-      "Anh Tran",
-      "Quoc Pham"
+      "Quang Le",
+      "Yen Vu"
     ],
-    "authors_joined": "Anh Tran, Quoc Pham",
+    "authors_joined": "Quang Le, Yen Vu",
     "categories": [
-      "Software Engineering",
-      "Data Systems"
+      "Evaluation Methodology",
+      "Enterprise Systems"
     ],
-    "categories_joined": "Software Engineering, Data Systems",
-    "primary_category": "Software Engineering",
+    "categories_joined": "Evaluation Methodology, Enterprise Systems",
+    "primary_category": "Evaluation Methodology",
     "published": "2026-06-12",
     "updated": "2026-06-12",
-    "abs_url": "https://doi.org/10.1145/3637528.3671802",
-    "pdf_url": "https://doi.org/10.1145/3637528.3671802",
+    "abs_url": "https://doi.org/10.1145/3637528.3671824",
+    "pdf_url": "https://doi.org/10.1145/3637528.3671824",
     "comment": "",
     "summary_chars": 0,
     "age_days": 106,
-    "text_for_embedding": "Title: Data Observability and Quality Gates for Production RAG Systems\nAuthors: Anh Tran, Quoc Pham\nPublished: 2026-06-12\nCategories: Software Engineering, Data Systems\nSummary: "
+    "text_for_embedding": "Title: Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines\nAuthors: Quang Le, Yen Vu\nPublished: 2026-06-12\nCategories: Evaluation Methodology, Enterprise Systems\nSummary: "
   },
   {
     "paper_id": "10.1145/3637528.3671823",
@@ -96,30 +96,6 @@
     "text_for_embedding": "Title: Advanced Perspectives on Chunking Strategies for Technical Documentation Retrieval\nAuthors: Long Trinh, Ha Chu\nPublished: 2026-06-09\nCategories: Information Retrieval, Natural Language Processing\nSummary: [CORRUPTED_NOISE_TOKEN_7749_GARBAGE_DATA_STREAM_ERROR_404_NULL_BYTE] An extended empirical study on ierarchical and semantic boundary chunking preserves code block contexts and markdown headings. Our benchmark demonstrates superior top-1 recall compared to fixed character length sliding windows Further analysis on scaling parameters. [CORRUPTED_NOISE_TOKEN_7749_GARBAGE_DATA_STREAM_ERROR_404_NULL_BYTE]"
   },
   {
-    "paper_id": "10.1145/3637528.3671820",
-    "title": "Advan",
-    "summary": "An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.",
-    "authors": [
-      "Phong Vu",
-      "Ngan Hoang"
-    ],
-    "authors_joined": "Phong Vu, Ngan Hoang",
-    "categories": [
-      "Multi-Agent Systems",
-      "Artificial Intelligence"
-    ],
-    "categories_joined": "Multi-Agent Systems, Artificial Intelligence",
-    "primary_category": "Multi-Agent Systems",
-    "published": "2026-06-08",
-    "updated": "2026-06-08",
-    "abs_url": "https://doi.org/10.1145/3637528.3671820",
-    "pdf_url": "https://doi.org/10.1145/3637528.3671820",
-    "comment": "",
-    "summary_chars": 271,
-    "age_days": 110,
-    "text_for_embedding": "Title: Advan\nAuthors: Phong Vu, Ngan Hoang\nPublished: 2026-06-08\nCategories: Multi-Agent Systems, Artificial Intelligence\nSummary: An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters."
-  },
-  {
     "paper_id": "10.1145/3637528.3671810",
     "title": "Autom",
     "summary": "Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.",
@@ -142,6 +118,30 @@
     "summary_chars": 203,
     "age_days": 110,
     "text_for_embedding": "Title: Autom\nAuthors: Son Nguyen, Thuy Doan\nPublished: 2026-06-08\nCategories: Data Quality, DevOps\nSummary: Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model."
+  },
+  {
+    "paper_id": "10.1145/3637528.3671820",
+    "title": "Advan",
+    "summary": "An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.",
+    "authors": [
+      "Phong Vu",
+      "Ngan Hoang"
+    ],
+    "authors_joined": "Phong Vu, Ngan Hoang",
+    "categories": [
+      "Multi-Agent Systems",
+      "Artificial Intelligence"
+    ],
+    "categories_joined": "Multi-Agent Systems, Artificial Intelligence",
+    "primary_category": "Multi-Agent Systems",
+    "published": "2026-06-08",
+    "updated": "2026-06-08",
+    "abs_url": "https://doi.org/10.1145/3637528.3671820",
+    "pdf_url": "https://doi.org/10.1145/3637528.3671820",
+    "comment": "",
+    "summary_chars": 271,
+    "age_days": 110,
+    "text_for_embedding": "Title: Advan\nAuthors: Phong Vu, Ngan Hoang\nPublished: 2026-06-08\nCategories: Multi-Agent Systems, Artificial Intelligence\nSummary: An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters."
   },
   {
     "paper_id": "10.1145/3637528.3671819",
@@ -456,28 +456,28 @@
     "text_for_embedding": "Title: Evaluating Retrieval Precision with Token F1 and LLM Judges\nAuthors: Tuan Phan, Mai Bui\nPublished: 2025-03-28\nCategories: Natural Language Processing, Evaluation Methodology\nSummary: Evaluating open-domain QA requires robust metrics. We benchmark semantic similarity, token-level overlap F1, and model-based judge verdicts to quantify RAG answer correctness across noisy corpus conditions."
   },
   {
-    "paper_id": "10.1145/3637528.3671802",
-    "title": "Data Observability and Quality Gates for Production RAG Systems",
+    "paper_id": "10.1145/3637528.3671824",
+    "title": "Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines",
     "summary": "",
     "authors": [
-      "Anh Tran",
-      "Quoc Pham"
+      "Quang Le",
+      "Yen Vu"
     ],
-    "authors_joined": "Anh Tran, Quoc Pham",
+    "authors_joined": "Quang Le, Yen Vu",
     "categories": [
-      "Software Engineering",
-      "Data Systems"
+      "Evaluation Methodology",
+      "Enterprise Systems"
     ],
-    "categories_joined": "Software Engineering, Data Systems",
-    "primary_category": "Software Engineering",
+    "categories_joined": "Evaluation Methodology, Enterprise Systems",
+    "primary_category": "Evaluation Methodology",
     "published": "2026-06-12",
     "updated": "2026-06-12",
-    "abs_url": "https://doi.org/10.1145/3637528.3671802",
-    "pdf_url": "https://doi.org/10.1145/3637528.3671802",
+    "abs_url": "https://doi.org/10.1145/3637528.3671824",
+    "pdf_url": "https://doi.org/10.1145/3637528.3671824",
     "comment": "",
     "summary_chars": 0,
     "age_days": 106,
-    "text_for_embedding": "Title: Data Observability and Quality Gates for Production RAG Systems\nAuthors: Anh Tran, Quoc Pham\nPublished: 2026-06-12\nCategories: Software Engineering, Data Systems\nSummary: "
+    "text_for_embedding": "Title: Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines\nAuthors: Quang Le, Yen Vu\nPublished: 2026-06-12\nCategories: Evaluation Methodology, Enterprise Systems\nSummary: "
   },
   {
     "paper_id": "10.1145/3637528.3671823",

@@ -1,8 +1,8 @@
 paper_id,title,summary,authors,authors_joined,categories,categories_joined,primary_category,published,updated,abs_url,pdf_url,comment,summary_chars,age_days,text_for_embedding
-10.1145/3637528.3671802,Data Observability and Quality Gates for Production RAG Systems,,"['Anh Tran', 'Quoc Pham']","Anh Tran, Quoc Pham","['Software Engineering', 'Data Systems']","Software Engineering, Data Systems",Software Engineering,2026-06-12,2026-06-12,https://doi.org/10.1145/3637528.3671802,https://doi.org/10.1145/3637528.3671802,,0,106,"Title: Data Observability and Quality Gates for Production RAG Systems
-Authors: Anh Tran, Quoc Pham
+10.1145/3637528.3671824,Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines,,"['Quang Le', 'Yen Vu']","Quang Le, Yen Vu","['Evaluation Methodology', 'Enterprise Systems']","Evaluation Methodology, Enterprise Systems",Evaluation Methodology,2026-06-12,2026-06-12,https://doi.org/10.1145/3637528.3671824,https://doi.org/10.1145/3637528.3671824,,0,106,"Title: Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines
+Authors: Quang Le, Yen Vu
 Published: 2026-06-12
-Categories: Software Engineering, Data Systems
+Categories: Evaluation Methodology, Enterprise Systems
 Summary: "
 10.1145/3637528.3671823,Advanced Perspectives on Hybrid Search Architectures: Combining BM25 with Dense Representations,,"['Dat Tran', 'Lan Pham']","Dat Tran, Lan Pham","['Information Retrieval', 'Algorithms']","Information Retrieval, Algorithms",Information Retrieval,2026-06-11,2026-06-11,https://doi.org/10.1145/3637528.3671823,https://doi.org/10.1145/3637528.3671823,,0,107,"Title: Advanced Perspectives on Hybrid Search Architectures: Combining BM25 with Dense Representations
 Authors: Dat Tran, Lan Pham
@@ -19,16 +19,16 @@ Authors: Long Trinh, Ha Chu
 Published: 2026-06-09
 Categories: Information Retrieval, Natural Language Processing
 Summary: [CORRUPTED_NOISE_TOKEN_7749_GARBAGE_DATA_STREAM_ERROR_404_NULL_BYTE] An extended empirical study on ierarchical and semantic boundary chunking preserves code block contexts and markdown headings. Our benchmark demonstrates superior top-1 recall compared to fixed character length sliding windows Further analysis on scaling parameters. [CORRUPTED_NOISE_TOKEN_7749_GARBAGE_DATA_STREAM_ERROR_404_NULL_BYTE]"
-10.1145/3637528.3671820,Advan,An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.,"['Phong Vu', 'Ngan Hoang']","Phong Vu, Ngan Hoang","['Multi-Agent Systems', 'Artificial Intelligence']","Multi-Agent Systems, Artificial Intelligence",Multi-Agent Systems,2026-06-08,2026-06-08,https://doi.org/10.1145/3637528.3671820,https://doi.org/10.1145/3637528.3671820,,271,110,"Title: Advan
-Authors: Phong Vu, Ngan Hoang
-Published: 2026-06-08
-Categories: Multi-Agent Systems, Artificial Intelligence
-Summary: An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters."
 10.1145/3637528.3671810,Autom,Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.,"['Son Nguyen', 'Thuy Doan']","Son Nguyen, Thuy Doan","['Data Quality', 'DevOps']","Data Quality, DevOps",Data Quality,2026-06-08,2026-06-08,https://doi.org/10.1145/3637528.3671810,https://doi.org/10.1145/3637528.3671810,,203,110,"Title: Autom
 Authors: Son Nguyen, Thuy Doan
 Published: 2026-06-08
 Categories: Data Quality, DevOps
 Summary: Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model."
+10.1145/3637528.3671820,Advan,An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.,"['Phong Vu', 'Ngan Hoang']","Phong Vu, Ngan Hoang","['Multi-Agent Systems', 'Artificial Intelligence']","Multi-Agent Systems, Artificial Intelligence",Multi-Agent Systems,2026-06-08,2026-06-08,https://doi.org/10.1145/3637528.3671820,https://doi.org/10.1145/3637528.3671820,,271,110,"Title: Advan
+Authors: Phong Vu, Ngan Hoang
+Published: 2026-06-08
+Categories: Multi-Agent Systems, Artificial Intelligence
+Summary: An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters."
 10.1145/3637528.3671819,Advanced Perspectives on Synthetic Corruption Testing: Stress-Testing Vector Search Robustness,"An extended empirical study on e introduce an automated fuzzing suite that corrupts text chunks by injecting noise, truncating titles, and blanking summaries. Experiments reveal critical failure thresholds for dense embedding retrieval Further analysis on scaling parameters.","['Kien Duong', 'Vy Ly']","Kien Duong, Vy Ly","['Robustness', 'Information Retrieval']","Robustness, Information Retrieval",Robustness,2026-06-07,2026-06-07,https://doi.org/10.1145/3637528.3671819,https://doi.org/10.1145/3637528.3671819,,275,111,"Title: Advanced Perspectives on Synthetic Corruption Testing: Stress-Testing Vector Search Robustness
 Authors: Kien Duong, Vy Ly
 Published: 2026-06-07
@@ -94,10 +94,10 @@ Authors: Tuan Phan, Mai Bui
 Published: 2025-03-28
 Categories: Natural Language Processing, Evaluation Methodology
 Summary: Evaluating open-domain QA requires robust metrics. We benchmark semantic similarity, token-level overlap F1, and model-based judge verdicts to quantify RAG answer correctness across noisy corpus conditions."
-10.1145/3637528.3671802,Data Observability and Quality Gates for Production RAG Systems,,"['Anh Tran', 'Quoc Pham']","Anh Tran, Quoc Pham","['Software Engineering', 'Data Systems']","Software Engineering, Data Systems",Software Engineering,2026-06-12,2026-06-12,https://doi.org/10.1145/3637528.3671802,https://doi.org/10.1145/3637528.3671802,,0,106,"Title: Data Observability and Quality Gates for Production RAG Systems
-Authors: Anh Tran, Quoc Pham
+10.1145/3637528.3671824,Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines,,"['Quang Le', 'Yen Vu']","Quang Le, Yen Vu","['Evaluation Methodology', 'Enterprise Systems']","Evaluation Methodology, Enterprise Systems",Evaluation Methodology,2026-06-12,2026-06-12,https://doi.org/10.1145/3637528.3671824,https://doi.org/10.1145/3637528.3671824,,0,106,"Title: Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines
+Authors: Quang Le, Yen Vu
 Published: 2026-06-12
-Categories: Software Engineering, Data Systems
+Categories: Evaluation Methodology, Enterprise Systems
 Summary: "
 10.1145/3637528.3671823,Advanced Perspectives on Hybrid Search Architectures: Combining BM25 with Dense Representations,,"['Dat Tran', 'Lan Pham']","Dat Tran, Lan Pham","['Information Retrieval', 'Algorithms']","Information Retrieval, Algorithms",Information Retrieval,2026-06-11,2026-06-11,https://doi.org/10.1145/3637528.3671823,https://doi.org/10.1145/3637528.3671823,,0,107,"Title: Advanced Perspectives on Hybrid Search Architectures: Combining BM25 with Dense Representations
 Authors: Dat Tran, Lan Pham

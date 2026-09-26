@@ -67,6 +67,56 @@ def _observe(settings: Settings, df: pd.DataFrame, label: str) -> tuple[dict[str
     return quality, freshness
 
 
+def _print_comparison(
+    baseline_metrics: dict[str, Any],
+    corrupted_metrics: dict[str, Any],
+    repaired_metrics: dict[str, Any],
+    baseline_quality: dict[str, Any] | None,
+    corrupted_quality: dict[str, Any],
+    repaired_quality: dict[str, Any],
+    baseline_freshness: dict[str, Any] | None,
+    corrupted_freshness: dict[str, Any],
+    repaired_freshness: dict[str, Any],
+) -> None:
+    """In bang doi chieu 3 trang thai ra console; status lay tu ket qua that, khong hardcode."""
+
+    def pct(metrics: dict[str, Any], key: str) -> str:
+        return f"{metrics.get(key, 0.0) * 100:.1f}%"
+
+    def num(metrics: dict[str, Any], key: str) -> str:
+        return f"{metrics.get(key, 0.0):.4f}"
+
+    def gate(quality: dict[str, Any] | None) -> str:
+        if quality is None:
+            return "N/A"
+        return "PASSED" if quality.get("success") else "FAILED"
+
+    def fresh(freshness: dict[str, Any] | None) -> str:
+        if freshness is None:
+            return "N/A"
+        return "FRESH" if freshness.get("is_fresh") else "STALE"
+
+    rows = [
+        ("Retrieval Hit Rate", pct(baseline_metrics, "retrieval_hit_rate"), pct(corrupted_metrics, "retrieval_hit_rate"), pct(repaired_metrics, "retrieval_hit_rate")),
+        ("Mean Token F1", num(baseline_metrics, "mean_token_f1"), num(corrupted_metrics, "mean_token_f1"), num(repaired_metrics, "mean_token_f1")),
+        ("Judge Accuracy", pct(baseline_metrics, "judge_accuracy"), pct(corrupted_metrics, "judge_accuracy"), pct(repaired_metrics, "judge_accuracy")),
+        ("Quality Gate (GX)", gate(baseline_quality), gate(corrupted_quality), gate(repaired_quality)),
+        ("Freshness SLA", fresh(baseline_freshness), fresh(corrupted_freshness), fresh(repaired_freshness)),
+    ]
+    print("\n" + "=" * 70)
+    print("BANG DOI CHIEU 3 TRANG THAI: Baseline vs Corrupted vs Repaired")
+    print("=" * 70)
+    print(f"{'Chi so':<25} | {'Baseline':<12} | {'Corrupted':<12} | {'Repaired':<12}")
+    print("-" * 70)
+    for name, baseline, corrupted, repaired in rows:
+        print(f"{name:<25} | {baseline:<12} | {corrupted:<12} | {repaired:<12}")
+    print("=" * 70)
+
+
+def _read_optional(path: Path) -> dict[str, Any] | None:
+    return read_json(path) if path.exists() else None
+
+
 def main() -> None:
     settings = load_settings()
     paths = settings.paths
@@ -127,3 +177,20 @@ def main() -> None:
         repaired_freshness,
     )
     print(f"[corruption] Report -> {paths.comparison_report}")
+
+    # 9. In bang doi chieu ra console (CP5). Baseline quality/freshness lay tu report phase 1.
+    _print_comparison(
+        baseline_metrics,
+        corrupted_metrics,
+        repaired_metrics,
+        _read_optional(paths.baseline_quality_report),
+        corrupted_quality,
+        repaired_quality,
+        _read_optional(paths.freshness_report),
+        corrupted_freshness,
+        repaired_freshness,
+    )
+
+
+if __name__ == "__main__":
+    main()
